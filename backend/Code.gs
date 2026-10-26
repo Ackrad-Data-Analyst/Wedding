@@ -24,7 +24,7 @@ function doGet(e) {
     const page = HtmlService.createHtmlOutput(
       '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>' +
       '<script>google.script.run.withSuccessHandler(function(data){' +
-      'window.parent.postMessage({type:"ACKRAD_KALUYA_SIDE_STATUS",status:data},' +
+      'window.top.postMessage({type:"ACKRAD_KALUYA_SIDE_STATUS",status:data},' +
       '"https://ackrad-data-analyst.github.io");' +
       '}).getPublicStatus('+JSON.stringify(side)+');<\/script>' +
       '</body></html>'
