@@ -1,8 +1,8 @@
 const { chromium } = require('playwright');
 const BASE='https://ackrad-data-analyst.github.io/Wedding/';
 const CASES=[
- {side:'Groom',label:"Groom's family & friends",limit:65,path:'groom/'},
- {side:'Bride',label:"Bride's family & friends",limit:85,path:'bride/'}
+ {side:'Groom',label:"Groom's family & friends",limit:70,path:'groom/'},
+ {side:'Bride',label:"Bride's family & friends",limit:90,path:'bride/'}
 ];
 (async()=>{
  const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
