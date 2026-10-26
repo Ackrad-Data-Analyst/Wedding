@@ -66,7 +66,7 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
   <h2>Confirm your attendance</h2>
   <p class="muted small">STRICTLY BY INVITATION ONLY. Register yourself or yourself and your invited spouse. A spouse is not an additional guest or friend. Each adult takes one place.</p>
   <div id="closed" class="notice hidden"></div>
-  <form id="rsvpForm"><div class="field"><label for="registrationType">Registration type *</label><select id="registrationType" name="registrationType" required><option value="individual">One invited adult (1 place)</option><option value="couple">Invited husband and wife (2 places)</option></select></div>
+  <form id="rsvpForm"><div class="field"><label for="registrationType">Registration type *</label><select id="registrationType" name="registrationType" required><option value="individual">One invited adult (1 place)</option><option value="couple">My invited husband or wife and me (2 places)</option></select></div>
     <div class="fields">
       <div class="field">
         <label for="title">Title *</label>
@@ -108,7 +108,7 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
         </select>
       </div>
     </div>
-<div id="partnerFields" class="field hidden"><label>Your husband or wife’s details</label><input id="partnerFirstName" name="partnerFirstName" placeholder="Spouse’s first name"><input id="partnerLastName" name="partnerLastName" placeholder="Spouse’s surname"><input id="partnerAge" name="partnerAge" type="number" min="18" max="120" placeholder="Age"><select id="partnerTitle" name="partnerTitle"><option value="">Select title</option><option>Mr</option><option>Mrs</option><option>Miss</option><option>Ms</option><option>Dr</option><option>Prof</option><option>Rev</option><option>Other</option></select></div>
+<div id="partnerFields" class="field hidden"><label for="spouseRelationship">Is this person your husband or wife? *</label><select id="spouseRelationship" name="spouseRelationship"><option value="">Select relationship</option><option value="husband">My husband</option><option value="wife">My wife</option></select><label>Your husband or wife’s full name *</label><input id="partnerFirstName" name="partnerFirstName" placeholder="Spouse’s first name"><input id="partnerLastName" name="partnerLastName" placeholder="Spouse’s surname"><input id="partnerAge" name="partnerAge" type="number" min="18" max="120" placeholder="Age"><select id="partnerTitle" name="partnerTitle"><option value="">Select title</option><option>Mr</option><option>Mrs</option><option>Miss</option><option>Ms</option><option>Dr</option><option>Prof</option><option>Rev</option><option>Other</option></select></div>
     <div class="field">
       <label for="assistanceDetails">Assistance details (optional)</label>
       <textarea name="assistanceDetails" id="assistanceDetails" placeholder="Only describe practical assistance you may need."></textarea>
@@ -148,7 +148,7 @@ const form = document.getElementById('rsvpForm');
 const button = document.getElementById('submit');
 const registrationType=document.getElementById('registrationType');
 const partnerFields=document.getElementById('partnerFields');
-const partnerInputs=['partnerFirstName','partnerLastName','partnerAge','partnerTitle'].map(id=>document.getElementById(id));
+const partnerInputs=['spouseRelationship','partnerFirstName','partnerLastName','partnerAge','partnerTitle'].map(id=>document.getElementById(id));
 function updateRegistrationType(){
  const couple=registrationType.value==='couple';
  partnerFields.classList.toggle('hidden',!couple);
