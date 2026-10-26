@@ -18,6 +18,19 @@ function validSide_(side) {
 
 function doGet(e) {
   const side = e && e.parameter ? e.parameter.side : '';
+  if (validSide_(side) && e && e.parameter && e.parameter.view === 'status') {
+    // A minimal, read-only status bridge for each public family invitation.
+    // Sends aggregate counts only; guest names, phone numbers and sheet data stay private.
+    const page = HtmlService.createHtmlOutput(
+      '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>' +
+      '<script>google.script.run.withSuccessHandler(function(data){' +
+      'window.parent.postMessage({type:"ACKRAD_KALUYA_SIDE_STATUS",status:data},' +
+      '"https://ackrad-data-analyst.github.io");' +
+      '}).getPublicStatus('+JSON.stringify(side)+');<\/script>' +
+      '</body></html>'
+    );
+    return page.setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  }
   if (!validSide_(side)) {
     return HtmlService.createHtmlOutput(
       '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1">' +
@@ -65,8 +78,7 @@ function status_(rows, side) {
     String(r[12]).trim().toLowerCase() === 'confirmed'
   ).length;
   const remaining = Math.max(0, capacity-confirmed);
-  const deadlineString = PropertiesService.getScriptProperties()
-    .getProperty('RSVP_DEADLINE') || '2026-12-15T23:59:00+02:00';
+  const deadlineString = '2026-11-15T23:59:00+02:00'; // Fixed RSVP deadline chosen by the organizers.
   const deadline = Date.parse(deadlineString);
   let reason = '';
   if (!Number.isFinite(deadline)) reason = 'RSVP deadline is not configured.';
