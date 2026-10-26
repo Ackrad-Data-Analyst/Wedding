@@ -1,56 +1,236 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ackrad & Kaluya · Wedding Invitation</title><style>
-:root{--ink:#30252a;--wine:#67263d;--gold:#a77b48;--ivory:#fbf7ef;--line:#e5dacc}*{box-sizing:border-box}body{margin:0;font:16px/1.55 'Segoe UI',Arial,sans-serif;background:var(--ivory);color:var(--ink)}.wrap{max-width:850px;margin:auto;padding:18px 20px 70px}.hero{background:linear-gradient(140deg,#f7eddf,#fffefa 53%,#f2e9de);border:1px solid #e6d8c6;position:relative;text-align:center;padding:66px 20px 55px;overflow:hidden}.hero:before,.hero:after{content:'◇  ◇  ◇';position:absolute;color:var(--gold);opacity:.20;font-size:36px;transform:rotate(90deg)}.hero:before{left:-45px;top:40%}.hero:after{right:-45px;top:40%}.eyebrow{font-size:11px;letter-spacing:.28em;font-weight:700;color:var(--wine)}h1,h2,h3{font-family:Georgia,serif;font-weight:500}h1{font-size:clamp(46px,9vw,82px);color:var(--wine);margin:10px 0}h1 em{color:var(--gold);font-weight:400}h2{font-size:30px;margin:0 0 12px;color:var(--wine)}h3{font-size:23px;margin:0 0 10px;color:var(--wine)}.hero p{margin:10px auto;max-width:550px}.date{font:600 18px Georgia,serif;color:#745231;letter-spacing:.08em}.ornament{width:140px;height:3px;background:var(--gold);margin:25px auto;border-radius:6px}.section{padding:34px 5px;border-bottom:1px solid var(--line)}.center{text-align:center}.muted{color:#716c66}.cols{display:grid;grid-template-columns:1fr 1fr;gap:15px}.card{background:white;border:1px solid var(--line);padding:22px;border-radius:10px}.time{font-weight:800;color:var(--wine);font-size:21px}.small{font-size:13px}.tag{display:inline-block;font-size:12px;background:#f5ebdc;color:#754d20;border-radius:20px;padding:4px 12px}.btn{display:inline-block;text-decoration:none;background:var(--wine);color:white;border:0;border-radius:7px;padding:12px 20px;font-size:15px;font-weight:700;cursor:pointer}.btn.alt{background:white;color:var(--wine);border:1px solid var(--wine)}.btn:disabled{opacity:.5;cursor:not-allowed}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:17px 0}.stat{text-align:center;background:#fff;padding:15px 5px;border:1px solid var(--line);border-radius:8px}.stat strong{font-size:29px;color:var(--wine);display:block}.stat span{font-size:12px;color:#716c66}.bar{height:12px;background:#e7dfd4;border-radius:20px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#67263d,#a77b48);width:0%;transition:width .3s}.notice{padding:14px 17px;background:#f5eee3;border-left:4px solid var(--gold);border-radius:3px;margin:15px 0}.rules{padding-left:22px}.rules li{margin:8px 0}.field{margin:0 0 16px}label{display:block;font-weight:650;font-size:14px;margin-bottom:6px}input,select,textarea{font:inherit;width:100%;border:1px solid #cabfb4;background:white;border-radius:6px;padding:11px 12px;color:var(--ink)}textarea{min-height:72px}input[type=checkbox]{width:auto;accent-color:var(--wine)}.check{display:flex;gap:9px;align-items:flex-start}.check label{font-weight:400}.check input{margin-top:5px}.error{color:#a21d32}.success{background:#eef5eb;border:1px solid #a9c99d;border-radius:8px;padding:18px}.hidden{display:none!important}.footer{margin-top:35px;text-align:center;font-size:12px;color:#857b71}.pattern{display:flex;gap:5px;justify-content:center;margin:12px 0;color:#926d3a;letter-spacing:8px}.tiny{font-size:12px;color:#777}.gift{font-size:17px}.links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}.rsvp{scroll-margin-top:20px}@media(max-width:580px){.cols{grid-template-columns:1fr}.hero{padding:48px 13px}.stats{gap:5px}.stat strong{font-size:24px}.wrap{padding:12px 13px 65px}}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wedding Guest Registration</title>
+<style>
+:root{--wine:#67263d;--gold:#a77b48;--cream:#fbf7ef;--ink:#2e2629;--border:#e5d9cd}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+main{max-width:760px;margin:0 auto;padding:22px 16px 48px}
+h1,h2{font-family:Georgia,serif;color:var(--wine);font-weight:500}
+h1{font-size:clamp(27px,5vw,40px);margin:7px 0}
+h2{font-size:25px;margin:0 0 10px}
+header{text-align:center;padding:18px 0 16px}
+.eyebrow{letter-spacing:.18em;font-weight:700;color:var(--gold);font-size:12px}
+.muted{color:#69615d}.small{font-size:13px}
+.subtitle{margin:3px auto 0;max-width:580px}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 10px}
+.metric{background:#fff;border:1px solid var(--border);border-radius:9px;text-align:center;padding:14px 4px 10px}
+.metric strong{display:block;font-size:27px;color:var(--wine);font-variant-numeric:tabular-nums}
+.metric span{font-size:12px;color:#6a625d}
+.track{height:10px;border-radius:20px;background:#e6ddd4;overflow:hidden;margin-bottom:10px}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--wine),var(--gold));transition:width .3s}
+.panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px;margin-top:17px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{margin-bottom:16px}
+label{display:block;margin-bottom:6px;font-weight:650;font-size:14px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cbbeb3;border-radius:7px;font:inherit;color:var(--ink);background:#fff}
+input:focus,select:focus,textarea:focus{outline:2px solid #a77b48;outline-offset:1px}
+textarea{min-height:80px}
+.check{display:flex;align-items:flex-start;gap:11px;margin:13px 0}
+.check input{width:auto;margin-top:5px;accent-color:var(--wine)}
+.check label{font-weight:400;margin:0}
+.btn{border:0;border-radius:7px;padding:14px 20px;font:700 16px system-ui,sans-serif;background:var(--wine);color:#fff;cursor:pointer}
+.btn:disabled{opacity:.52;cursor:not-allowed}
+.btn.secondary{background:#fff;color:var(--wine);border:1px solid var(--wine)}
+#submit{width:100%;margin-top:18px}
+.notice{border-left:4px solid var(--gold);padding:12px 16px;background:#f7f0e6;border-radius:3px;margin:18px 0}
+.error{color:#a51c32;min-height:20px;font-weight:600}
+.success{background:#eef7ee;border:1px solid #b3d2b1;border-radius:10px;padding:23px}
+.hidden{display:none!important}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
+footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
+@media(max-width:600px){main{padding:10px 11px 30px}header{padding-top:14px}.fields{grid-template-columns:1fr;gap:0}.summary{gap:5px}.metric{padding:9px 2px}.metric strong{font-size:23px}.metric span{font-size:11px}.panel{padding:17px 13px}}
+</style>
+</head>
+<body data-side="<?= registrationSide ?>">
+<main>
+<header>
+  <div class="eyebrow">ACKRAD &amp; KALUYA · 2 JANUARY 2027</div>
+  <h1 id="heading">Wedding Guest Registration</h1>
+  <p class="subtitle muted" id="subtitle">Please complete this form to confirm your attendance.</p>
+</header>
 
-/* Form-only mode opens in a separate browser tab. */
-body.form-only main.wrap > :not(#rsvp) {display:none!important}
-body.form-only .wrap{max-width:740px;padding:10px 12px 35px}
-body.form-only #rsvp{padding:0;border:0}
-body.form-only #rsvp > .center,body.form-only #rsvp > p.center{display:none!important}
-body.form-only #formArea{padding:12px;border:0;background:transparent}
-body.form-only #success{margin-top:14px}
-body.form-only .field{margin-bottom:18px}
-body.form-only button#submit{width:100%;padding:16px}
-</style></head><body><main class="wrap">
-<header class="hero"><div class="eyebrow">TOGETHER WITH OUR FAMILIES</div><h1>Ackrad <em>&</em> Kaluya</h1><div class="pattern">◆ ◇ ◆ ◇ ◆</div><p>Joyfully invite you to celebrate our marriage and the joining of our families, with love and traditions inspired by our Tonga and Bemba heritage.</p><div class="ornament"></div><div class="date">SATURDAY · 2 JANUARY 2027</div><p>Andrew’s Motel · Kafue Road · Lusaka, Zambia</p><p><a class="btn" href="#rsvp">Confirm attendance</a></p></header>
-<section class="section center" id="availability"><h2>Wedding RSVP availability</h2><div class="stats"><div class="stat"><strong id="confirmed">—</strong><span>Confirmed seats</span></div><div class="stat"><strong id="remaining">—</strong><span>Places remaining</span></div><div class="stat"><strong id="days">—</strong><span>Days until wedding</span></div></div><div class="bar"><div class="fill" id="progress"></div></div><p class="center small muted" id="countNote">Live capacity appears here as soon as the site connects.</p><p class="center small" id="deadlineNote"></p><p><a class="btn" href="#rsvp">Register my attendance</a></p></section>
-<section class="section center"><h2>Our wedding day</h2><p class="muted">One beautiful day, two celebrations, one venue.</p><div class="cols" style="text-align:left"><div class="card"><span class="tag">Morning · Christian ceremony</span><h3>Marriage Blessing</h3><div class="time">10:00 AM</div><p>Christian marriage blessing and formal ceremony, including the marriage-signing proceedings as arranged with the authorized officiant.</p><p><b>Dress code:</b> Western formal attire (suits and formal dresses).</p><p><b>Photo session:</b> Couple, families and guests following the ceremony.</p></div><div class="card"><span class="tag">Afternoon · Zambian traditions</span><h3>Traditional Reception</h3><div class="time">3:00–7:00 PM</div><p>A joyful celebration of our families and Zambian cultural heritage, with food, music and traditional moments.</p><p><b>Dress code:</b> Zambian traditional attire representing any culture in Zambia.</p><p><b>Photo session:</b> Couple, family and group photographs during the reception.</p></div></div><p class="tiny">Program details and photo-session timings may be adjusted by the organizers.</p></section>
-<section class="section center"><h2>Find us</h2><p><b>Andrew’s Motel</b> (also listed as Andrew’s Resort & Spa)<br>Kafue Road, Makeni/Chilanga area, Lusaka.</p><div class="links"><a class="btn alt" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Andrew%27s+Motel+Kafue+Road+Lusaka">Google Maps directions ↗</a><a class="btn alt" target="_blank" rel="noopener" href="https://www.waze.com/live-map/directions/zm/lusaka-province/lusaka/andrews-resort-and-spa-%28formerly-andrews-motel%29?to=place.ChIJBc45GLXzQBkR9gpd5o05eXI">Waze directions ↗</a></div><p class="tiny">Please verify the entrance with the organizers before travelling.</p></section>
-<section class="section"><h2 class="center">A few kind requests</h2><ul class="rules"><li><b>By invitation and confirmed RSVP only.</b> Registration is for the named invited adult only. Please do not bring additional guests.</li><li><b>Adults only:</b> no children or infants.</li><li><b>No pets or other animals.</b> Trained assistance animals can be discussed privately with the organizers where relevant.</li><li><b>Smoking and vaping are prohibited</b> at our wedding events.</li><li><b>No alcohol before 6:00 PM.</b> Guests are kindly asked to respect this arrangement and venue rules throughout the day.</li><li><b>Respectful conduct:</b> Please help us maintain a peaceful, considerate atmosphere and follow the guidance of the ushers and organizers.</li><li><b>Changes:</b> If you can no longer attend after confirming, please contact the organizer promptly so the place can be offered to another guest.</li></ul><div class="notice">Our venue and catering arrangements have been made for 150 guests across both families. Unfortunately, this means we cannot accommodate everyone who wishes to join us. We sincerely appreciate your understanding and hope nobody feels slighted by this limitation.</div></section>
-<section class="section center"><h2>A note from the wedding organizing team</h2><p class="gift">The wedding organizing team warmly invites family and friends who wish to support Ackrad and Kaluya as they begin married life to consider a <b>monetary gift</b> rather than household items, which are difficult to transport while living abroad.</p><p>For anyone seeking guidance, <b>K500 is a suggested contribution</b>, but any amount is appreciated. Gifts are entirely optional; your presence and good wishes are what matter most.</p><p class="muted small">Gift/payment instructions will be provided separately by the organizers. Please do not send money through unverified numbers or links.</p></section>
-<section class="section rsvp" id="rsvp"><div class="center"><h2>Reserve your place</h2><p class="muted">Please confirm only if you intend to attend. One completed registration reserves one adult seat, while places remain.</p></div><p class="center small muted">The live seat count and countdown are displayed at the top of this invitation as soon as it opens.</p>
-<div class="card" id="formArea"><form id="rsvpForm"><div class="cols"><div class="field"><label for="title">Title *</label><select required id="title" name="title"><option value="">Choose title</option><option>Mr</option><option>Mrs</option><option>Miss</option><option>Ms</option><option>Dr</option><option>Prof</option><option>Rev</option><option>Other</option></select></div><div class="field"><label for="side">Invited through *</label><select required id="side" name="side"><option value="">Choose side</option><option value="Groom">Groom’s family / friends</option><option value="Bride">Bride’s family / friends</option></select></div></div>
-<div class="cols"><div class="field"><label for="firstName">First name *</label><input required id="firstName" name="firstName" maxlength="70" autocomplete="given-name"></div><div class="field"><label for="lastName">Surname *</label><input required id="lastName" name="lastName" maxlength="70" autocomplete="family-name"></div></div>
-<div class="cols"><div class="field"><label for="age">Age on wedding day *</label><input required id="age" name="age" type="number" min="18" max="120" placeholder="Adults aged 18 or older"></div><div class="field"><label for="whatsapp">WhatsApp number with country code *</label><input required id="whatsapp" name="whatsapp" type="tel" placeholder="e.g. +260 97 123 4567"></div></div>
-<div class="cols"><div class="field"><label for="city">City / town *</label><input required id="city" name="city" maxlength="90"></div><div class="field"><label for="country">Country *</label><input required id="country" name="country" maxlength="90" value="Zambia"></div></div>
-<div class="field"><label for="accessibility">Any accessibility assistance needed?</label><select id="accessibility" name="accessibility"><option value="No">No</option><option value="Yes">Yes, please contact me</option></select><p class="tiny">For example: wheelchair access, help walking or climbing steps, or seating arrangements because of a disability or mobility difficulty. We ask so we can plan practical assistance with the venue.</p></div><div class="field"><label for="assistanceDetails">Assistance details (optional)</label><textarea id="assistanceDetails" name="assistanceDetails" placeholder="Only tell us what would help you attend comfortably."></textarea></div>
-<div class="check field"><input type="checkbox" id="adultOnly" required><label for="adultOnly">I confirm that I am 18 or older and am registering only myself, not children or additional guests. *</label></div>
-<div class="check field"><input type="checkbox" id="attend" required><label for="attend">Yes, I have received this invitation and confirm that I will attend the wedding on 2 January 2027. *</label></div>
-<div class="check field"><input type="checkbox" id="rules" required><label for="rules">I understand the dress codes, event rules and 150-person limit. If my plans change, I will notify the organizers so my seat can be released. *</label></div>
-<div class="check field"><input type="checkbox" id="privacy" required><label for="privacy">I agree that the organizers may use my details to manage my RSVP and contact me about the wedding. My personal details will not be shown to other guests. *</label></div>
-<p class="error" id="message" role="alert"></p><button class="btn" id="submit" type="submit" disabled>Confirm my attendance</button><p class="tiny" id="modeInfo">Preview only. Live registration is disabled until the organizer deploys the secure registration backend.</p></form></div>
-<div class="success hidden" id="success" aria-live="polite"><h3>You're confirmed!</h3><p id="confirmText"></p><p><b>2 January 2027 · Andrew’s Motel, Lusaka</b></p><p>Marriage blessing: 10:00 AM · Traditional reception: 3:00–7:00 PM</p><p>Please save your confirmation number and show it at the entrance with your name. If your plans change, contact the organizers to release your seat.</p><div class="links"><a class="btn alt" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Andrew%27s+Motel+Kafue+Road+Lusaka">Open directions ↗</a><button class="btn alt" id="copyConfirmation" type="button">Copy confirmation</button></div></div>
-</section><footer class="footer"><div class="pattern">◆ ◇ ◆ ◇ ◆</div>Ackrad & Kaluya · 2 January 2027 · Lusaka<br>Made with love, respect and gratitude for our families.</footer>
-</main><script>
+<div class="summary" aria-label="Availability on this family side">
+  <div class="metric"><strong id="capacity">—</strong><span>Side allocation</span></div>
+  <div class="metric"><strong id="confirmed">—</strong><span>Confirmed</span></div>
+  <div class="metric"><strong id="remaining">—</strong><span>Places left</span></div>
+  <div class="metric"><strong id="days">—</strong><span>Days to go</span></div>
+</div>
+<div class="track" role="progressbar" aria-label="Seats reserved" aria-valuemin="0" id="progress" aria-valuenow="0"><div class="fill" id="progressFill"></div></div>
+<p class="small muted" id="capacityNote" role="status">Checking live guest availability…</p>
 
-/* Read the actual Apps Script web-app URL so ?view=form shows ONLY registration. */
-(function(){
-  function setMode(locationData){
-    var p=(locationData&&locationData.parameter)||{};
-    if(p.view==='form'||p.view==='register'){
-      document.body.classList.add('form-only');
-      document.title='Register & Confirm Attendance | Ackrad & Kaluya';
+<div class="panel" id="formPanel">
+  <h2>Confirm your attendance</h2>
+  <p class="muted small">This registration reserves <b>one adult seat</b> after it is successfully submitted. Your confirmation number appears immediately on screen.</p>
+  <div id="closed" class="notice hidden"></div>
+  <form id="rsvpForm">
+    <div class="fields">
+      <div class="field">
+        <label for="title">Title *</label>
+        <select id="title" name="title" required>
+          <option value="">Choose title</option>
+          <option>Mr</option><option>Mrs</option><option>Miss</option><option>Ms</option>
+          <option>Dr</option><option>Prof</option><option>Rev</option><option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="firstName">First name *</label>
+        <input id="firstName" name="firstName" maxlength="70" autocomplete="given-name" required>
+      </div>
+      <div class="field">
+        <label for="lastName">Surname *</label>
+        <input id="lastName" name="lastName" maxlength="70" autocomplete="family-name" required>
+      </div>
+      <div class="field">
+        <label for="age">Age on wedding day *</label>
+        <input type="number" id="age" name="age" min="18" max="120" required placeholder="18 or older">
+      </div>
+      <div class="field">
+        <label for="whatsapp">WhatsApp number, including country code *</label>
+        <input type="tel" id="whatsapp" name="whatsapp" required placeholder="+260 97 123 4567">
+      </div>
+      <div class="field">
+        <label for="city">City / town *</label>
+        <input id="city" name="city" maxlength="90" required>
+      </div>
+      <div class="field">
+        <label for="country">Country *</label>
+        <input id="country" name="country" maxlength="90" value="Zambia" required>
+      </div>
+      <div class="field">
+        <label for="accessibility">Accessibility assistance needed?</label>
+        <select id="accessibility" name="accessibility">
+          <option value="No">No</option>
+          <option value="Yes">Yes, please contact me</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="assistanceDetails">Assistance details (optional)</label>
+      <textarea name="assistanceDetails" id="assistanceDetails" placeholder="Only describe practical assistance you may need."></textarea>
+    </div>
+    <div class="check"><input type="checkbox" id="adultOnly" required>
+      <label for="adultOnly">I am aged 18 or older and am registering myself only. No children or additional guests. *</label>
+    </div>
+    <div class="check"><input type="checkbox" id="attend" required>
+      <label for="attend">I have received an invitation and intend to attend on 2 January 2027. *</label>
+    </div>
+    <div class="check"><input type="checkbox" id="rules" required>
+      <label for="rules">I understand the wedding dress codes and event rules, and will contact the organizers if my plans change. *</label>
+    </div>
+    <div class="check"><input type="checkbox" id="privacy" required>
+      <label for="privacy">I agree that the organizers may use my details only to manage wedding attendance and contact me about this event. *</label>
+    </div>
+    <p class="error" id="message" role="alert"></p>
+    <button type="submit" id="submit" class="btn" disabled>Confirm my attendance</button>
+    <p class="small muted" id="statusText">Checking registration availability…</p>
+  </form>
+</div>
+
+<div class="success hidden" id="success" aria-live="polite">
+  <h2>Your attendance is confirmed!</h2>
+  <p id="confirmationText"></p>
+  <p><strong>2 January 2027 · Andrew's Motel, Lusaka</strong></p>
+  <p>Save your confirmation number and present it with your name at the entrance. Please contact the organizers if you need to cancel.</p>
+  <div class="actions"><button type="button" class="btn secondary" id="copyCode">Copy confirmation</button></div>
+</div>
+<footer>Ackrad &amp; Kaluya · Wedding guest registration<br>Only successful submissions reserve a seat. Do not share this link outside the invited family and friends.</footer>
+</main>
+<script>
+const SIDE = document.body.dataset.side;
+const WEDDING = new Date('2027-01-02T10:00:00+02:00').getTime();
+const CAPACITY = SIDE === 'Groom' ? 65 : 85;
+const form = document.getElementById('rsvpForm');
+const button = document.getElementById('submit');
+let lastConfirmation = '';
+let canSubmit = false;
+
+document.getElementById('heading').textContent =
+  SIDE === 'Groom' ? "Groom's family & friends" : "Bride's family & friends";
+document.getElementById('subtitle').textContent =
+  'Private invitation RSVP · '+(SIDE === 'Groom' ? "Ackrad's guest allocation" : "Kaluya's guest allocation");
+document.getElementById('capacity').textContent = String(CAPACITY);
+function countdown(){
+  document.getElementById('days').textContent =
+    String(Math.max(0,Math.ceil((WEDDING-Date.now())/86400000)));
+}
+countdown();
+setInterval(countdown,3600000);
+
+function showStatus(status){
+  if(!status || status.side !== SIDE || status.capacity !== CAPACITY) return;
+  document.getElementById('confirmed').textContent = String(status.confirmed);
+  document.getElementById('remaining').textContent = String(status.remaining);
+  const progress = document.getElementById('progress');
+  progress.setAttribute('aria-valuemax',String(status.capacity));
+  progress.setAttribute('aria-valuenow',String(status.confirmed));
+  document.getElementById('progressFill').style.width =
+    (status.confirmed/status.capacity*100)+'%';
+  document.getElementById('capacityNote').textContent =
+    status.remaining+' of '+status.capacity+' places are available for this family side.'+
+    (status.deadlineDisplay?' RSVP deadline: '+status.deadlineDisplay+'.':'');
+  canSubmit = status.open;
+  button.disabled = !canSubmit;
+  document.getElementById('statusText').textContent =
+    status.open ? 'Your seat is reserved only after a successful confirmation.' :
+      status.reason || 'Registration is currently closed.';
+  const closed = document.getElementById('closed');
+  closed.classList.toggle('hidden',status.open);
+  closed.textContent = status.open ? '' : (status.reason || 'Registration is closed.');
+}
+function loadStatus(){
+  google.script.run.withSuccessHandler(showStatus).withFailureHandler(function(){
+    button.disabled=true;
+    document.getElementById('capacityNote').textContent =
+      'Live availability cannot be checked right now. Please refresh.';
+  }).getPublicStatus(SIDE);
+}
+loadStatus();
+setInterval(loadStatus,30000);
+
+form.addEventListener('submit',function(event){
+  event.preventDefault();
+  if(!canSubmit || !form.reportValidity())return;
+  button.disabled=true;
+  button.textContent='Confirming your place…';
+  document.getElementById('message').textContent='';
+  const data=Object.fromEntries(new FormData(form).entries());
+  data.side=SIDE;
+  google.script.run.withSuccessHandler(function(result){
+    button.textContent='Confirm my attendance';
+    if(result && result.ok){
+      const name=data.firstName+' '+data.lastName;
+      lastConfirmation=result.code+' — '+name+' — 2 January 2027';
+      document.getElementById('formPanel').classList.add('hidden');
+      document.getElementById('success').classList.remove('hidden');
+      document.getElementById('confirmationText').textContent =
+        name+', your '+SIDE.toLowerCase()+'-side seat is reserved. Confirmation number: '+result.code+'.';
+      showStatus(result.status);
+      window.scrollTo({top:0,behavior:'smooth'});
+    } else {
+      document.getElementById('message').textContent =
+        (result && result.message) || 'Your registration was not saved. Please retry.';
+      loadStatus();
     }
-  }
-  if(typeof google!=='undefined'&&google.script&&google.script.url&&typeof google.script.url.getLocation==='function'){
-    google.script.url.getLocation(setMode);
+  }).withFailureHandler(function(){
+    button.textContent='Confirm my attendance';
+    button.disabled=false;
+    document.getElementById('message').textContent =
+      'Could not confirm registration. Please check with the organizer before retrying to avoid duplicates.';
+  }).registerGuest(data);
+});
+document.getElementById('copyCode').addEventListener('click',function(){
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(lastConfirmation).then(function(){
+      document.getElementById('copyCode').textContent='Copied';
+    });
   }else{
-    try{setMode({parameter:{view:(new URLSearchParams(window.location.search)).get('view')}})}catch(e){}
+    window.prompt('Copy this confirmation:',lastConfirmation);
   }
-})();
-const WEDDING='2027-01-02T10:00:00+02:00';const server=typeof google!=='undefined'&&google.script&&google.script.run;let current=null,lastConfirmation='';
-function daysLeft(){return Math.max(0,Math.ceil((new Date(WEDDING).getTime()-Date.now())/86400000))};function updateCountdown(){document.getElementById('days').textContent=daysLeft()};updateCountdown();
-function showStats(r){if(!r)return;try{window.top.postMessage({type:'ACKRAD_KALUYA_RSVP_STATUS',status:r},'*')}catch(_e){};current=r;document.getElementById('confirmed').textContent=r.confirmed;document.getElementById('remaining').textContent=r.remaining;document.getElementById('progress').style.width=(100*r.confirmed/r.capacity)+'%';document.getElementById('countNote').textContent=r.remaining===0?'All places have been taken. Registration is closed.':r.remaining+' of '+r.capacity+' invitations remain available.';document.getElementById('deadlineNote').textContent=r.deadlineDisplay?'RSVP deadline: '+r.deadlineDisplay:'';document.getElementById('submit').disabled=!r.open||r.remaining===0;document.getElementById('modeInfo').textContent=r.open?'Your registration is confirmed immediately after a successful submission. One seat per person.':(r.reason||'Registration is closed.');}
-if(server){google.script.run.withSuccessHandler(showStats).withFailureHandler(e=>{document.getElementById('countNote').textContent='Could not load live seat count. Refresh to retry.'}).getPublicStatus();setInterval(()=>google.script.run.withSuccessHandler(showStats).getPublicStatus(),30000)}
-document.getElementById('rsvpForm').addEventListener('submit',e=>{e.preventDefault();if(!server)return;const f=e.currentTarget;const b=document.getElementById('submit');const m=document.getElementById('message');m.textContent='';if(!f.reportValidity())return;b.disabled=true;b.textContent='Confirming…';const payload=Object.fromEntries(new FormData(f));google.script.run.withSuccessHandler(r=>{b.textContent='Confirm my attendance';if(r.ok){lastConfirmation=r.code+' — '+payload.firstName+' '+payload.lastName+' — 2 January 2027, Andrew’s Motel, Lusaka';document.getElementById('formArea').classList.add('hidden');document.getElementById('success').classList.remove('hidden');document.getElementById('confirmText').textContent=payload.firstName+', your place is reserved. Your confirmation number is '+r.code+'. Save this information and keep it private.';showStats(r.status);document.getElementById('success').scrollIntoView({behavior:'smooth'})}else{m.textContent=r.message||'Could not complete registration.';google.script.run.withSuccessHandler(showStats).getPublicStatus();}}).withFailureHandler(err=>{b.disabled=false;b.textContent='Confirm my attendance';m.textContent='Could not complete registration. Please contact the organizer before trying again, to avoid duplicate bookings.';}).registerGuest(payload)});
-document.getElementById('copyConfirmation').addEventListener('click',()=>{if(navigator.clipboard)navigator.clipboard.writeText(lastConfirmation).then(()=>alert('Confirmation copied'));else alert(lastConfirmation)});
-</script></body></html>
+});
+</script>
+</body>
+</html>
