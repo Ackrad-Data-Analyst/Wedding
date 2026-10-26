@@ -59,6 +59,7 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
   <div class="metric"><strong id="remaining">—</strong><span>Places left</span></div>
   <div class="metric"><strong id="days">—</strong><span>Days to go</span></div>
 </div>
+<p class="small muted" id="liveCountdown"></p>
 <div class="track" role="progressbar" aria-label="Seats reserved" aria-valuemin="0" id="progress" aria-valuenow="0"><div class="fill" id="progressFill"></div></div>
 <p class="small muted" id="capacityNote" role="status">Checking live guest availability…</p>
 
@@ -66,7 +67,7 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
   <h2>Confirm your attendance</h2>
   <p class="muted small">STRICTLY BY INVITATION ONLY. Register yourself or yourself and your invited spouse. A spouse is not an additional guest or friend. Each adult takes one place.</p>
   <div id="closed" class="notice hidden"></div>
-  <form id="rsvpForm"><div class="field"><label for="registrationType">Registration type *</label><select id="registrationType" name="registrationType" required><option value="individual">One invited adult (1 place)</option><option value="couple">My invited husband or wife and me (2 places)</option></select></div>
+  <form id="rsvpForm"><div class="field"><label for="registrationType">Registration type *</label><select id="registrationType" name="registrationType" required><option value="individual">One invited adult (1 place)</option><option value="couple">My spouse and me — husband or wife (2 places)</option></select></div>
     <div class="fields">
       <div class="field">
         <label for="title">Title *</label>
@@ -108,7 +109,7 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
         </select>
       </div>
     </div>
-<div id="partnerFields" class="field hidden"><label for="spouseRelationship">Is this person your husband or wife? *</label><select id="spouseRelationship" name="spouseRelationship"><option value="">Select relationship</option><option value="husband">My husband</option><option value="wife">My wife</option></select><label>Your husband or wife’s full name *</label><input id="partnerFirstName" name="partnerFirstName" placeholder="Spouse’s first name"><input id="partnerLastName" name="partnerLastName" placeholder="Spouse’s surname"><input id="partnerAge" name="partnerAge" type="number" min="18" max="120" placeholder="Age"><select id="partnerTitle" name="partnerTitle"><option value="">Select title</option><option>Mr</option><option>Mrs</option><option>Miss</option><option>Ms</option><option>Dr</option><option>Prof</option><option>Rev</option><option>Other</option></select></div>
+<div id="partnerFields" class="field hidden"><label for="spouseRelationship">Who are you registering with? *</label><select id="spouseRelationship" name="spouseRelationship"><option value="">Select relationship</option><option value="husband">My husband</option><option value="wife">My wife</option></select><label>Full name of your invited husband or wife *</label><input id="partnerFirstName" name="partnerFirstName" placeholder="Spouse’s first name"><input id="partnerLastName" name="partnerLastName" placeholder="Spouse’s surname"><input id="partnerAge" name="partnerAge" type="number" min="18" max="120" placeholder="Age"><select id="partnerTitle" name="partnerTitle"><option value="">Select title</option><option>Mr</option><option>Mrs</option><option>Miss</option><option>Ms</option><option>Dr</option><option>Prof</option><option>Rev</option><option>Other</option></select></div>
     <div class="field">
       <label for="assistanceDetails">Assistance details (optional)</label>
       <textarea name="assistanceDetails" id="assistanceDetails" placeholder="Only describe practical assistance you may need."></textarea>
@@ -167,10 +168,13 @@ document.getElementById('subtitle').textContent =
 document.getElementById('capacity').textContent = String(CAPACITY);
 function countdown(){
   document.getElementById('days').textContent =
-    String(Math.max(0,Math.ceil((WEDDING-Date.now())/86400000)));
+    String(Math.floor(Math.max(0,WEDDING-Date.now())/86400000));
+  const left=Math.max(0,WEDDING-Date.now());
+  document.getElementById('liveCountdown').textContent='Countdown: '+Math.floor(left/86400000)+' days · '+String(Math.floor(left%86400000/3600000)).padStart(2,'0')+' hours · '+String(Math.floor(left%3600000/60000)).padStart(2,'0')+' minutes · '+String(Math.floor(left%60000/1000)).padStart(2,'0')+' seconds';
 }
 countdown();
-setInterval(countdown,60000);
+setInterval(countdown,1000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)countdown();});
 
 function showStatus(status){
   if(!status || status.side !== SIDE || status.capacity !== CAPACITY) return;
