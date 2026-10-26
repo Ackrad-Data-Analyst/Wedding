@@ -1,10 +1,10 @@
 /**
  * Ackrad & Kaluya — Wedding RSVP backend
- * Two independent family allocations: Groom 65 / Bride 85.
+ * Two independent family allocations: Groom 70 / Bride 90.
  * The existing private RSVP Google Sheet remains the source of truth.
  */
 const CONFIG = {
-  LIMITS: {Groom:65, Bride:85},
+  LIMITS: {Groom:70, Bride:90},
   EVENT: '2027-01-02T10:00:00+02:00',
   TZ: 'Africa/Lusaka',
   SHEET: 'RSVP',
