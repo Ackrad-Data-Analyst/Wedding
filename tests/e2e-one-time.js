@@ -9,9 +9,12 @@ const BASE='https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXq
    const page=await context.newPage();
    try {
     await page.goto(BASE+'?side='+side,{waitUntil:'domcontentloaded',timeout:40000});
-    await page.waitForTimeout(2000);
-    const appsFrame=page.frames().find(f=>f.url().includes('userCodeAppPanel'));
-    if(!appsFrame)throw Error('Google HTML form frame not found');
+    await page.waitForTimeout(7000);
+    let appsFrame=null;
+    for(const frame of page.frames()){
+      try{if(await frame.locator('#submit').count()>0){appsFrame=frame;break;}}catch(e){}
+    }
+    if(!appsFrame)throw Error('Google HTML form not found across '+page.frames().length+' frames');
     await appsFrame.locator('#submit').waitFor({state:'visible',timeout:15000});
     await appsFrame.waitForFunction(()=>!document.querySelector('#submit').disabled,{timeout:15000});
     if((await appsFrame.locator('#capacity').innerText())!==String(capacity))throw Error('Wrong capacity');
@@ -19,7 +22,7 @@ const BASE='https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXq
     await appsFrame.locator('#firstName').fill('QAONLY');
     await appsFrame.locator('#lastName').fill(side+'TestRemove');
     await appsFrame.locator('#age').fill('30');
-    await appsFrame.locator('#whatsapp').fill('+260 000 000 00'+lastDigit);
+    await appsFrame.locator('#whatsapp').fill('260 000 000 00'+lastDigit);
     await appsFrame.locator('#city').fill('QA_TEST');
     await appsFrame.locator('#country').fill('Zambia');
     await appsFrame.locator('#assistanceDetails').fill('Automated QA test — delete this row.');
