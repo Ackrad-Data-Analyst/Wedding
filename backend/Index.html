@@ -146,6 +146,17 @@ const WEDDING = new Date('2027-01-02T10:00:00+02:00').getTime();
 const CAPACITY = SIDE === 'Groom' ? 65 : 85;
 const form = document.getElementById('rsvpForm');
 const button = document.getElementById('submit');
+const registrationType=document.getElementById('registrationType');
+const partnerFields=document.getElementById('partnerFields');
+const partnerInputs=['partnerFirstName','partnerLastName','partnerAge','partnerTitle'].map(id=>document.getElementById(id));
+function updateRegistrationType(){
+ const couple=registrationType.value==='couple';
+ partnerFields.classList.toggle('hidden',!couple);
+ partnerInputs.forEach(el=>{el.required=couple;if(!couple)el.value='';});
+ button.textContent=couple?'Confirm two guests':'Confirm my attendance';
+}
+registrationType.addEventListener('change',updateRegistrationType);
+updateRegistrationType();
 let lastConfirmation = '';
 let canSubmit = false;
 
