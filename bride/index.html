@@ -49,21 +49,21 @@ window.addEventListener('message',function(event){
   const info=event.data;
   if(!info||info.type!=='ACKRAD_KALUYA_SIDE_STATUS')return;
   const s=info.status;
-  if(!s||s.side!==SIDE||s.capacity!==CAPACITY||
+  if(!s||s.side!==SIDE||s.capacity<1||
      !Number.isInteger(s.confirmed)||!Number.isInteger(s.remaining)||
-     s.confirmed<0||s.remaining<0||s.confirmed+s.remaining!==CAPACITY)return;
+     s.confirmed<0||s.remaining<0||s.confirmed+s.remaining!==s.capacity||s.confirmed>CAPACITY)return;
   document.getElementById('confirmed').textContent=String(s.confirmed);
-  document.getElementById('remaining').textContent=String(s.remaining);
+  document.getElementById('remaining').textContent=String(CAPACITY-s.confirmed);
   document.getElementById('progress').style.width=(100*s.confirmed/CAPACITY)+'%';
-  document.getElementById('countNote').textContent=s.remaining===0
+  document.getElementById('countNote').textContent=CAPACITY-s.confirmed===0
    ? 'All '+CAPACITY+' places have been reserved.'
-   : s.remaining+' of '+CAPACITY+' places are available for this family side.';
+   : (CAPACITY-s.confirmed)+' of '+CAPACITY+' places are available for this family side.';
 });
 setTimeout(function(){
   if(document.getElementById('confirmed').textContent==='—'){
     document.getElementById('countNote').textContent='Live registration totals are currently unavailable. Please use the registration page to check availability.';
   }
 },12000);
-setInterval(function(){const frame=document.getElementById('statusBridge');frame.src='https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXqjpi4LDQfH66CkRGUGogAI_guJBrE4Z1PO1y4vH8Jg/exec?side=Bride&view=status&reload='+Date.now()},60000);
+setInterval(function(){const frame=document.getElementById('statusBridge');frame.src='https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXqjpi4LDQfH66CkRGUGogAI_guJBrE4Z1PO1y4vH8Jg/exec?side=Bride&view=status&reload='+Date.now()},10000);
 </script>
 </body></html>
