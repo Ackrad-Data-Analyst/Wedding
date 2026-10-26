@@ -114,10 +114,10 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
       <textarea name="assistanceDetails" id="assistanceDetails" placeholder="Only describe practical assistance you may need."></textarea>
     </div>
     <div class="check"><input type="checkbox" id="adultOnly" required>
-      <label for="adultOnly">I am aged 18 or older and am registering myself only. No children or additional guests. *</label>
+      <label for="adultOnly">All people I am registering are invited adults aged 18 or older. No children or uninvited guests. *</label>
     </div>
     <div class="check"><input type="checkbox" id="attend" required>
-      <label for="attend">I have received an invitation and intend to attend on 2 January 2027. *</label>
+      <label for="attend">I confirm that each adult named in this registration has received an invitation to attend on 2 January 2027. *</label>
     </div>
     <div class="check"><input type="checkbox" id="rules" required>
       <label for="rules">I understand the wedding dress codes and event rules, and will contact the organizers if my plans change. *</label>
@@ -186,6 +186,10 @@ function showStatus(status){
     (status.deadlineDisplay?' RSVP deadline: '+status.deadlineDisplay+'.':'');
   canSubmit = status.open;
   button.disabled = !canSubmit;
+  registrationType.querySelector('option[value="couple"]').disabled=status.remaining<2;
+  if(status.remaining<2 && registrationType.value==='couple'){
+    registrationType.value='individual';updateRegistrationType();
+  }
   document.getElementById('statusText').textContent =
     status.open ? 'Your seat is reserved only after a successful confirmation.' :
       status.reason || 'Registration is currently closed.';
@@ -212,14 +216,15 @@ form.addEventListener('submit',function(event){
   const data=Object.fromEntries(new FormData(form).entries());
   data.side=SIDE;
   google.script.run.withSuccessHandler(function(result){
-    button.textContent='Confirm my attendance';
+    button.textContent=registrationType.value==='couple'?'Confirm two guests':'Confirm my attendance';
     if(result && result.ok){
       const name=data.firstName+' '+data.lastName;
-      lastConfirmation=result.code+' — '+name+' — 2 January 2027';
+      const guests=data.registrationType==='couple' ? name+' and '+data.partnerFirstName+' '+data.partnerLastName : name;
+      lastConfirmation=result.code+' — '+guests+' — 2 January 2027';
       document.getElementById('formPanel').classList.add('hidden');
       document.getElementById('success').classList.remove('hidden');
       document.getElementById('confirmationText').textContent =
-        name+', your '+SIDE.toLowerCase()+'-side seat is reserved. Confirmation number: '+result.code+'.';
+        guests+', '+(result.seats===2?'your two invited adult places are reserved':'your invited adult place is reserved')+'. Confirmation number: '+result.code+'.';
       showStatus(result.status);
       window.scrollTo({top:0,behavior:'smooth'});
     } else {
