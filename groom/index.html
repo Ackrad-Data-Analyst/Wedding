@@ -36,8 +36,8 @@ function updateCountdown(){
 updateCountdown();
 setInterval(updateCountdown,3600000);
 window.addEventListener('message',function(event){
-  const iframe=document.getElementById('statusBridge');
-  if(!iframe||event.source!==iframe.contentWindow)return;
+  // Google Apps Script may nest its HTML in a Google-controlled iframe.
+  // Verify the Google origin and family-side status instead of frame identity.
   if(!/^https:\/\/(?:script\.google\.com|(?:[a-z0-9-]+\.)*googleusercontent\.com)$/i.test(event.origin))return;
   const info=event.data;
   if(!info||info.type!=='ACKRAD_KALUYA_SIDE_STATUS')return;
