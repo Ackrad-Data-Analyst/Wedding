@@ -134,9 +134,9 @@ function registerGuest(g) {
         !/^\+?[0-9\s()-]{8,22}$/.test(phone)) {
       return {ok:false,message:'Please enter a valid name, title, age, WhatsApp number, city and country.'};
     }
-    if (isCouple && (!titles.includes(g.partnerTitle) || !otherFirst || !otherLast ||
+    if (isCouple && (!['husband','wife'].includes(g.spouseRelationship) || !titles.includes(g.partnerTitle) || !otherFirst || !otherLast ||
       !Number.isInteger(otherAge) || otherAge < 18 || otherAge > 120)) {
-      return {ok:false,message:'Please provide the name, title and age of both invited adults.'};
+      return {ok:false,message:'Please confirm whether the second guest is your husband or wife, and provide their name, title and age.'};
     }
     const digits = phone.replace(/\D/g,'');
     if (rows.some(r =>
