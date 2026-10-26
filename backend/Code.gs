@@ -120,7 +120,7 @@ function registerGuest(g) {
     const first = scrub_(g.firstName,70);
     const last = scrub_(g.lastName,70);
     const age = Number(g.age);
-    const phone = scrub_(g.whatsapp,32);
+    const phone = String(g.whatsapp == null ? '' : g.whatsapp).trim().slice(0,32); // Keep a leading + for international dialling; the saved Sheet value is quoted separately.
     const city = scrub_(g.city,90);
     const country = scrub_(g.country,90);
     if (!titles.includes(g.title) || !first || !last || !city || !country ||
