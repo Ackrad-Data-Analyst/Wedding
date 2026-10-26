@@ -170,7 +170,7 @@ function countdown(){
     String(Math.max(0,Math.ceil((WEDDING-Date.now())/86400000)));
 }
 countdown();
-setInterval(countdown,3600000);
+setInterval(countdown,60000);
 
 function showStatus(status){
   if(!status || status.side !== SIDE || status.capacity !== CAPACITY) return;
