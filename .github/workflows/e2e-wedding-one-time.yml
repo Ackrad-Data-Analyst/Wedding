@@ -1,4 +1,4 @@
-name: One-time RSVP save verification
+name: One-time RSVP save verification (recheck)
 on:
   push:
     paths:
