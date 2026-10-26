@@ -19,7 +19,7 @@ const CASES=[
    const n=await ctas.count();
    const href=n===1?await ctas.first().getAttribute('href'):'';
    const target=n===1?await ctas.first().getAttribute('target'):'';
-   const checks={status200:http===200,correctCapacity:text.includes('Guest allocation')&&await page.locator('.stat strong').first().innerText()===String(t.limit),deadline:text.includes('15 November 2026'),hasFullInvitation:text.includes('Our wedding day')&&text.includes('Marriage Blessing')&&text.includes('Traditional Reception')&&text.includes('A note from the wedding organizing team'),oneRegistrationButton:n===1,buttonNewWindow:target==='_blank',correctSideForm:href.includes('side='+t.side),noEmbeddedForm:await page.locator('#rsvpForm').count()===0};
+   const checks={status200:http===200,correctCapacity:text.includes('Maximum number of guests budgeted for')&&await page.locator('.stat strong').first().innerText()===String(t.limit),deadline:text.includes('15 November 2026'),hasFullInvitation:text.includes('Our wedding day')&&text.includes('Western Traditional Wedding')&&text.includes('Zambian Traditional Wedding')&&text.includes('A note from the wedding organizing team'),oneRegistrationButton:n===1,buttonNewWindow:target==='_blank',correctSideForm:href.includes('side='+t.side),noEmbeddedForm:await page.locator('#rsvpForm').count()===0};
    console.log('INVITATION '+t.side+': '+JSON.stringify({http,title:heading,checks}));
    if(Object.values(checks).some(x=>!x)){failed=true;console.log('FAIL INVITATION '+t.side);}
    try{
@@ -39,7 +39,7 @@ const CASES=[
      await form.waitForTimeout(5500);
      const frameTexts=await Promise.all(form.frames().map(async frame=>{try{return {url:frame.url().slice(0,125),text:(await frame.locator('body').innerText({timeout:4000})).slice(0,3000)}}catch(e){return {url:frame.url().slice(0,125),text:'[unavailable]'}}}));
      const txt=frameTexts.map(x=>x.text).join('\n');
-     const result={http:r&&r.status(),url:form.url(),showsSide:txt.includes(t.label),hasForm:txt.includes('Confirm your attendance'),hasCurrentQuota:txt.includes(String(t.limit)),hasGuestFields:txt.includes('WhatsApp number'),hasDeadline:txt.includes('15 November 2026')};
+     const result={http:r&&r.status(),url:form.url(),showsSide:txt.includes(t.side==='Groom'?"Groom's":"Bride's"),hasForm:txt.includes('Confirm your attendance'),hasCurrentQuota:txt.includes(String(t.limit)),hasGuestFields:txt.includes('WhatsApp number'),hasDeadline:txt.includes('15 November 2026')};
      console.log('GOOGLE FORM '+t.side+': '+JSON.stringify({...result,visibleTextPreview:txt.slice(0,650),frames:frameTexts.map(z=>z.url)}));
      if(!result.showsSide||!result.hasForm||!result.hasCurrentQuota||!result.hasGuestFields){failed=true;console.log('FAIL GOOGLE FORM '+t.side+' - existing Google deployment probably not updated.');}
     }catch(e){failed=true;console.log('FAIL GOOGLE FORM '+t.side+' '+String(e));}
