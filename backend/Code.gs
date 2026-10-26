@@ -115,18 +115,28 @@ function registerGuest(g) {
     const rows = rows_(sheet);
     const status = status_(rows,g.side);
     if (!status.open) return {ok:false,message:status.reason};
+    const isCouple = g.registrationType === 'couple';
+    const seats = isCouple ? 2 : 1;
+    if (status.remaining < seats) return {ok:false,message:'Not enough guest places remain for this registration. A couple requires two available places.'};
 
     const titles = ['Mr','Mrs','Miss','Ms','Dr','Prof','Rev','Other'];
     const first = scrub_(g.firstName,70);
     const last = scrub_(g.lastName,70);
     const age = Number(g.age);
     const phone = String(g.whatsapp == null ? '' : g.whatsapp).trim().slice(0,32); // Keep a leading + for international dialling; the saved Sheet value is quoted separately.
+    const otherFirst = scrub_(g.partnerFirstName,70);
+    const otherLast = scrub_(g.partnerLastName,70);
+    const otherAge = Number(g.partnerAge);
     const city = scrub_(g.city,90);
     const country = scrub_(g.country,90);
     if (!titles.includes(g.title) || !first || !last || !city || !country ||
         !Number.isInteger(age) || age < 18 || age > 120 ||
         !/^\+?[0-9\s()-]{8,22}$/.test(phone)) {
       return {ok:false,message:'Please enter a valid name, title, age, WhatsApp number, city and country.'};
+    }
+    if (isCouple && (!titles.includes(g.partnerTitle) || !otherFirst || !otherLast ||
+      !Number.isInteger(otherAge) || otherAge < 18 || otherAge > 120)) {
+      return {ok:false,message:'Please provide the name, title and age of both invited adults.'};
     }
     const digits = phone.replace(/\D/g,'');
     if (rows.some(r =>
@@ -139,12 +149,23 @@ function registerGuest(g) {
       Utilities.formatDate(new Date(),CONFIG.TZ,'yyMMdd') + '-' +
       Utilities.getUuid().slice(0,8).toUpperCase();
 
-    sheet.appendRow([
+    const primary = [
       new Date(),code,g.title,first,last,g.side,age,"'"+phone,city,country,
       g.accessibility === 'Yes' ? 'Yes' : 'No',
       scrub_(g.assistanceDetails,350),'Confirmed'
+    ];
+    const entries = [primary];
+    if (isCouple) entries.push([
+      new Date(),code,g.partnerTitle,otherFirst,otherLast,g.side,otherAge,
+      "'"+phone,city,country,
+      g.accessibility === 'Yes' ? 'Yes' : 'No',
+      'Registered together with '+first+' '+last+'. '+scrub_(g.assistanceDetails,240),
+      'Confirmed'
     ]);
-    return {ok:true,code,status:status_(rows_(sheet),g.side)};
+    const startingRow = sheet.getLastRow()+1;
+    sheet.getRange(startingRow,1,entries.length,CONFIG.FIELDS.length).setValues(entries);
+    SpreadsheetApp.flush();
+    return {ok:true,code,seats,status:status_(rows_(sheet),g.side)};
   } finally {
     lock.releaseLock();
   }
