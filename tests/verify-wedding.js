@@ -29,7 +29,7 @@ const CASES=[
      await form.waitForTimeout(5500);
      const txt=await form.locator('body').innerText();
      const result={http:r&&r.status(),url:form.url(),showsSide:txt.includes(t.label),hasForm:txt.includes('Confirm your attendance'),hasCurrentQuota:txt.includes(String(t.limit)),hasGuestFields:txt.includes('WhatsApp number'),hasDeadline:txt.includes('15 November 2026')};
-     console.log('GOOGLE FORM '+t.side+': '+JSON.stringify(result));
+     console.log('GOOGLE FORM '+t.side+': '+JSON.stringify({...result,visibleTextPreview:txt.slice(0,650)}));
      if(!result.showsSide||!result.hasForm||!result.hasCurrentQuota||!result.hasGuestFields){failed=true;console.log('FAIL GOOGLE FORM '+t.side+' - existing Google deployment probably not updated.');}
     }catch(e){failed=true;console.log('FAIL GOOGLE FORM '+t.side+' '+String(e));}
     await form.close();
