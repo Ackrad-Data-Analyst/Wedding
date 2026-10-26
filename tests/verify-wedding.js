@@ -22,6 +22,16 @@ const CASES=[
    const checks={status200:http===200,correctCapacity:text.includes('Guest allocation')&&await page.locator('.stat strong').first().innerText()===String(t.limit),deadline:text.includes('15 November 2026'),hasFullInvitation:text.includes('Our wedding day')&&text.includes('Marriage Blessing')&&text.includes('Traditional Reception')&&text.includes('A note from the wedding organizing team'),oneRegistrationButton:n===1,buttonNewWindow:target==='_blank',correctSideForm:href.includes('side='+t.side),noEmbeddedForm:await page.locator('#rsvpForm').count()===0};
    console.log('INVITATION '+t.side+': '+JSON.stringify({http,title:heading,checks}));
    if(Object.values(checks).some(x=>!x)){failed=true;console.log('FAIL INVITATION '+t.side);}
+   try{
+     await page.waitForFunction(() => document.querySelector('#confirmed')?.textContent.trim() !== '—' &&
+       document.querySelector('#remaining')?.textContent.trim() !== '—',null,{timeout:12000});
+   }catch(e){console.log('LIVE INVITATION COUNTS UNAVAILABLE '+t.side);}
+   const liveConfirmed=Number(await page.locator('#confirmed').innerText());
+   const liveRemaining=Number(await page.locator('#remaining').innerText());
+   const liveOk=Number.isInteger(liveConfirmed)&&Number.isInteger(liveRemaining)&&
+     liveConfirmed>=0&&liveRemaining>=0&&liveConfirmed+liveRemaining===t.limit;
+   console.log('LIVE INVITATION COUNTS '+t.side+': '+JSON.stringify({confirmed:liveConfirmed,remaining:liveRemaining,valid:liveOk}));
+   if(!liveOk){failed=true;console.log('FAIL LANDING LIVE COUNTS '+t.side);}
    if(href){
     const form=await context.newPage();
     try{
