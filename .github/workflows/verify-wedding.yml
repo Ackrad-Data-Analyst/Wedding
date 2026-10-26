@@ -1,0 +1,22 @@
+name: Verify wedding invitations and RSVP
+on:
+  push:
+    paths:
+      - "groom/**"
+      - "bride/**"
+      - "backend/**"
+      - "tests/**"
+      - ".github/workflows/verify-wedding.yml"
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright@1.58.2
+      - run: npx playwright install --with-deps chromium
+      - run: node tests/verify-wedding.js
