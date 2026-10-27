@@ -187,8 +187,16 @@ window.addEventListener('message',event=>{
   document.getElementById('progressFill').style.width=(100*st.confirmed/CAPACITY)+'%';
   document.getElementById('capacityNote').textContent=latest.remaining+' of '+CAPACITY+' places remain available.';
   open=!!st.open&&latest.remaining>0;
+  if(latest.remaining===0){
+    open=false;
+    document.getElementById('capacityNote').textContent='⚠️ Seats are full. All '+CAPACITY+' places for '+(SIDE==='Groom'?"Ackrad's":"Kaluya's")+' invited guests have been taken.';
+    document.getElementById('statusText').textContent='⚠️ Registration closed — seats are full.';
+    document.getElementById('closed').classList.remove('hidden');
+    document.getElementById('closed').textContent='⚠️ Seats are full. Registration for this family is closed.';
+    button.disabled=true;
+  }
   document.getElementById('closed').classList.toggle('hidden',open);
-  document.getElementById('closed').textContent=open?'':st.reason||'Registrations are closed.';
+  document.getElementById('closed').textContent=open?'':(latest.remaining===0?'⚠️ Seats are full. Registration for this family is closed.':st.reason||'Registrations are closed.');
   updateType();return;
  }
  if(m.type==='ACKRAD_KALUYA_REGISTRATION_RESULT'&&submitting&&m.nonce===nonce){
@@ -204,6 +212,7 @@ window.addEventListener('message',event=>{
    window.scrollTo(0,0);refresh();
   }else{
    document.getElementById('message').textContent=r.message||'Unable to register. Please contact the organizers.';
+   if(/(places remain|places on this family|enough guest places|seats are full)/i.test(r.message||'')){open=false;document.getElementById('closed').classList.remove('hidden');document.getElementById('closed').textContent='⚠️ Seats are full or there are not enough places for the selected registration.';}
    refresh();
   }
   updateType();
