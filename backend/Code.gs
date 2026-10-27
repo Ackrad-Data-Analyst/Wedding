@@ -197,7 +197,7 @@ function doPost(e) {
   }
   const payload = JSON.stringify({type:'ACKRAD_KALUYA_REGISTRATION_RESULT',side:side,nonce:nonce,result:response}).replace(/</g,'\\u003c');
   const html = '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>'+
-    '<script>window.top.postMessage('+payload+',"https://ackrad-data-analyst.github.io");<\\/script>'+
+    '<script>window.top.postMessage('+payload+',"https://ackrad-data-analyst.github.io");</script>'+
     '</body></html>';
   return HtmlService.createHtmlOutput(html).setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
