@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wedding Guest Registration</title>
+<style>
+:root{--wine:#67263d;--gold:#a77b48;--cream:#fbf7ef;--ink:#2e2629;--border:#e5d9cd}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+main{max-width:760px;margin:0 auto;padding:22px 16px 48px}
+h1,h2{font-family:Georgia,serif;color:var(--wine);font-weight:500}
+h1{font-size:clamp(27px,5vw,40px);margin:7px 0}
+h2{font-size:25px;margin:0 0 10px}
+header{text-align:center;padding:18px 0 16px}
+.eyebrow{letter-spacing:.18em;font-weight:700;color:var(--gold);font-size:12px}
+.muted{color:#69615d}.small{font-size:13px}
+.subtitle{margin:3px auto 0;max-width:580px}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 10px}
+.metric{background:#fff;border:1px solid var(--border);border-radius:9px;text-align:center;padding:14px 4px 10px}
+.metric strong{display:block;font-size:27px;color:var(--wine);font-variant-numeric:tabular-nums}
+.metric span{font-size:12px;color:#6a625d}
+.track{height:10px;border-radius:20px;background:#e6ddd4;overflow:hidden;margin-bottom:10px}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--wine),var(--gold));transition:width .3s}
+.panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px;margin-top:17px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{margin-bottom:16px}
+label{display:block;margin-bottom:6px;font-weight:650;font-size:14px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cbbeb3;border-radius:7px;font:inherit;color:var(--ink);background:#fff}
+input:focus,select:focus,textarea:focus{outline:2px solid #a77b48;outline-offset:1px}
+textarea{min-height:80px}
+.check{display:flex;align-items:flex-start;gap:11px;margin:13px 0}
+.check input{width:auto;margin-top:5px;accent-color:var(--wine)}
+.check label{font-weight:400;margin:0}
+.btn{border:0;border-radius:7px;padding:14px 20px;font:700 16px system-ui,sans-serif;background:var(--wine);color:#fff;cursor:pointer}
+.btn:disabled{opacity:.52;cursor:not-allowed}
+.btn.secondary{background:#fff;color:var(--wine);border:1px solid var(--wine)}
+#submit{width:100%;margin-top:18px}
+.notice{border-left:4px solid var(--gold);padding:12px 16px;background:#f7f0e6;border-radius:3px;margin:18px 0}
+.error{color:#a51c32;min-height:20px;font-weight:600}
+.success{background:#eef7ee;border:1px solid #b3d2b1;border-radius:10px;padding:23px}
+.hidden{display:none!important}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
+footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
+@media(max-width:600px){main{padding:10px 11px 30px}header{padding-top:14px}.fields{grid-template-columns:1fr;gap:0}.summary{gap:5px}.metric{padding:9px 2px}.metric strong{font-size:23px}.metric span{font-size:11px}.panel{padding:17px 13px}}
+</style>
+</head>
+<body data-side="Bride">
+<main><p><a href="../" style="color:#67263d;text-decoration:none;font-weight:650">← Back to invitation</a></p>
+<header>
+  <div class="eyebrow">ACKRAD &amp; KALUYA · 2 JANUARY 2027</div>
+  <h1 id="heading">Wedding Guest Registration</h1>
+  <p class="subtitle muted" id="subtitle">Please complete this form to confirm your attendance.</p>
+</header>
+
+<div class="summary" aria-label="Availability on this family side">
+  <div class="metric"><strong id="capacity">—</strong><span>Maximum number of guests budgeted for</span></div>
+  <div class="metric"><strong id="confirmed">—</strong><span>Confirmed</span></div>
+  <div class="metric"><strong id="remaining">—</strong><span>Places left</span></div>
+  <div class="metric"><strong id="days">—</strong><span>Days to go</span></div>
+</div>
+<p class="small muted" id="liveCountdown"></p>
+<div class="track" role="progressbar" aria-label="Seats reserved" aria-valuemin="0" id="progress" aria-valuenow="0"><div class="fill" id="progressFill"></div></div>
+<p class="small muted" id="capacityNote" role="status">Checking live guest availability…</p>
+
+<div class="panel" id="formPanel">
+  <h2>Confirm your attendance</h2>
+  <p class="muted small">STRICTLY BY INVITATION ONLY. Register yourself or yourself and your invited spouse. A spouse is not an additional guest or friend. Each adult takes one place.</p>
+  <div id="closed" class="notice hidden"></div>
+  <form id="rsvpForm" method="POST" action="https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXqjpi4LDQfH66CkRGUGogAI_guJBrE4Z1PO1y4vH8Jg/exec" target="submitBridge"><input type="hidden" name="side" value="Bride"><input type="hidden" id="nonce" name="nonce"><div class="field"><label for="registrationType">Registration type *</label><select id="registrationType" name="registrationType" required><option value="individual">One invited adult (1 place)</option><option value="couple">My spouse and me — husband or wife (2 places)</option></select></div>
+    <div class="fields">
+      <div class="field">
+        <label for="title">Title *</label>
+        <select id="title" name="title" required>
+          <option value="">Choose title</option>
+          <option>Mr</option><option>Mrs</option><option>Miss</option><option>Ms</option>
+          <option>Dr</option><option>Prof</option><option>Rev</option><option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="firstName">First name *</label>
+        <input id="firstName" name="firstName" maxlength="70" autocomplete="given-name" required>
+      </div>
+      <div class="field">
+        <label for="lastName">Surname *</label>
+        <input id="lastName" name="lastName" maxlength="70" autocomplete="family-name" required>
+      </div>
+      <div class="field">
+        <label for="age">Age on wedding day *</label>
+        <input type="number" id="age" name="age" min="18" max="120" required placeholder="18 or older">
+      </div>
+      <div class="field">
+        <label for="whatsapp">WhatsApp number, including country code *</label>
+        <input type="tel" id="whatsapp" name="whatsapp" required placeholder="+260 97 123 4567">
+      </div>
+      <div class="field">
+        <label for="city">City / town *</label>
+        <input id="city" name="city" maxlength="90" required>
+      </div>
+      <div class="field">
+        <label for="country">Country *</label>
+        <input id="country" name="country" maxlength="90" value="Zambia" required>
+      </div>
+      <div class="field">
+        <label for="accessibility">Do you need assistance at the venue?</label><p class="small muted" style="margin:0 0 8px">For example: help with walking, using a wheelchair, climbing steps, finding an accessible seat, or getting to your seat. Select Yes if the organizers should contact you to arrange assistance.</p>
+        <select id="accessibility" name="accessibility">
+          <option value="No">No</option>
+          <option value="Yes">Yes, please contact me</option>
+        </select>
+      </div>
+    </div>
+<div id="partnerFields" class="field hidden"><label for="spouseRelationship">Who are you registering with? *</label><select id="spouseRelationship" name="spouseRelationship"><option value="">Select relationship</option><option value="husband">My husband</option><option value="wife">My wife</option></select><label>Full name of your invited husband or wife *</label><input id="partnerFirstName" name="partnerFirstName" placeholder="Spouse’s first name"><input id="partnerLastName" name="partnerLastName" placeholder="Spouse’s surname"><input id="partnerAge" name="partnerAge" type="number" min="18" max="120" placeholder="Age"><select id="partnerTitle" name="partnerTitle"><option value="">Select title</option><option>Mr</option><option>Mrs</option><option>Miss</option><option>Ms</option><option>Dr</option><option>Prof</option><option>Rev</option><option>Other</option></select></div>
+    <div class="field">
+      <label for="assistanceDetails">Assistance details (optional)</label>
+      <textarea name="assistanceDetails" id="assistanceDetails" placeholder="For example: I use a wheelchair and may need help getting to my seat."></textarea>
+    </div>
+    <div class="check"><input type="checkbox" id="adultOnly" required>
+      <label for="adultOnly">All people I am registering are invited adults aged 18 or older. No children or uninvited guests. *</label>
+    </div>
+    <div class="check"><input type="checkbox" id="attend" required>
+      <label for="attend">I confirm that each adult named in this registration has received an invitation to attend on 2 January 2027. *</label>
+    </div>
+    <div class="check"><input type="checkbox" id="rules" required>
+      <label for="rules">I understand the wedding dress codes and event rules, and will contact the organizers if my plans change. *</label>
+    </div>
+    <div class="check"><input type="checkbox" id="privacy" required>
+      <label for="privacy">I agree that the organizers may use my details only to manage wedding attendance and contact me about this event. *</label>
+    </div>
+    <p class="error" id="message" role="alert"></p>
+    <button type="submit" id="submit" class="btn" disabled>Confirm my attendance</button>
+    <p class="small muted" id="statusText">Checking registration availability…</p>
+  </form>
+</div>
+
+<div class="success hidden" id="success" aria-live="polite">
+  <h2>Your attendance is confirmed!</h2>
+  <p id="confirmationText"></p>
+  <p><strong>2 January 2027 · Andrew's Motel, Lusaka</strong></p>
+  <p>Save your confirmation number and present it with your name at the entrance. Please contact the organizers if you need to cancel.</p>
+  <div class="actions"><button type="button" class="btn secondary" id="copyCode">Copy confirmation</button></div>
+</div>
+<footer>Ackrad &amp; Kaluya · Wedding guest registration<br>Only invited adults may register.</footer>
+<iframe name="submitBridge" id="submitBridge" title="Registration response" style="position:absolute;left:-9999px;width:1px;height:1px;border:0"></iframe><iframe id="statusBridge" title="Seat availability" src="https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXqjpi4LDQfH66CkRGUGogAI_guJBrE4Z1PO1y4vH8Jg/exec?side=Bride&amp;view=status" style="position:absolute;left:-9999px;width:1px;height:1px;border:0"></iframe></main>
+<script>
+const SIDE="Bride";
+const CAPACITY=SIDE==='Groom'?70:90;
+const WEDDING=new Date('2027-01-02T10:00:00+02:00').getTime();
+const form=document.getElementById('rsvpForm');
+const button=document.getElementById('submit');
+const type=document.getElementById('registrationType');
+const panel=document.getElementById('partnerFields');
+const dependent=['spouseRelationship','partnerFirstName','partnerLastName','partnerAge','partnerTitle'].map(x=>document.getElementById(x));
+let open=false,submitting=false,latest=null,nonce='';
+document.getElementById('heading').textContent=SIDE==='Groom'?"Ackrad's invited guests":"Kaluya's invited guests";
+document.getElementById('subtitle').textContent="Private invitation RSVP";
+document.getElementById('capacity').textContent=String(CAPACITY);
+function updateType(){
+ const couple=type.value==='couple';
+ panel.classList.toggle('hidden',!couple);
+ dependent.forEach(el=>{el.required=couple;if(!couple)el.value='';});
+ button.textContent=couple?'Confirm two guests':'Confirm my attendance';
+ button.disabled=!open||submitting||(couple&&latest&&latest.remaining<2);
+}
+type.addEventListener('change',updateType);updateType();
+function tick(){
+ const n=Math.max(0,WEDDING-Date.now()),d=Math.floor(n/86400000),h=Math.floor(n%86400000/3600000),m=Math.floor(n%3600000/60000),s=Math.floor(n%60000/1000);
+ document.getElementById('days').textContent=String(d);
+ document.getElementById('liveCountdown').textContent='Countdown: '+d+' days · '+String(h).padStart(2,'0')+' hours · '+String(m).padStart(2,'0')+' minutes · '+String(s).padStart(2,'0')+' seconds';
+}
+tick();setInterval(tick,1000);
+function refresh(){
+ const f=document.getElementById('statusBridge');
+ f.src="https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXqjpi4LDQfH66CkRGUGogAI_guJBrE4Z1PO1y4vH8Jg/exec"+'?side='+SIDE+'&view=status&reload='+Date.now();
+}
+window.addEventListener('message',event=>{
+ if(!/^https:\/\/(?:script\.google\.com|(?:[a-z0-9-]+\.)*googleusercontent\.com)$/i.test(event.origin))return;
+ const m=event.data;
+ if(!m||m.side!==SIDE)return;
+ if(m.type==='ACKRAD_KALUYA_SIDE_STATUS'){
+  const st=m.status;
+  if(!st||!Number.isInteger(st.confirmed)||st.confirmed<0||st.confirmed>CAPACITY||!Number.isInteger(st.capacity)||st.confirmed+st.remaining!==st.capacity)return;
+  latest={...st,capacity:CAPACITY,remaining:CAPACITY-st.confirmed};
+  document.getElementById('confirmed').textContent=String(st.confirmed);
+  document.getElementById('remaining').textContent=String(latest.remaining);
+  document.getElementById('progressFill').style.width=(100*st.confirmed/CAPACITY)+'%';
+  document.getElementById('capacityNote').textContent=latest.remaining+' of '+CAPACITY+' places remain available.';
+  open=!!st.open&&latest.remaining>0;
+  document.getElementById('closed').classList.toggle('hidden',open);
+  document.getElementById('closed').textContent=open?'':st.reason||'Registrations are closed.';
+  updateType();return;
+ }
+ if(m.type==='ACKRAD_KALUYA_REGISTRATION_RESULT'&&submitting&&m.nonce===nonce){
+  submitting=false;
+  const r=m.result||{};
+  if(r.ok){
+   open=false;
+   const p=new FormData(form),n=p.get('firstName')+' '+p.get('lastName'),full=p.get('registrationType')==='couple'?n+' and '+p.get('partnerFirstName')+' '+p.get('partnerLastName'):n;
+   document.getElementById('formPanel').classList.add('hidden');
+   document.getElementById('success').classList.remove('hidden');
+   document.getElementById('confirmationText').textContent=full+', your '+(r.seats===2?'two guest places are':'guest place is')+' confirmed. Reference: '+r.code+'.';
+   window.currentConfirmation=r.code+' — '+full+' — 2 January 2027';
+   window.scrollTo(0,0);refresh();
+  }else{
+   document.getElementById('message').textContent=r.message||'Unable to register. Please contact the organizers.';
+   refresh();
+  }
+  updateType();
+ }
+});
+form.addEventListener('submit',event=>{
+ event.preventDefault();
+ if(submitting||!open||!form.reportValidity()||(type.value==='couple'&&latest?.remaining<2))return;
+ nonce='r'+Array.from(crypto.getRandomValues(new Uint8Array(16))).map(x=>x.toString(16).padStart(2,'0')).join('');
+ document.getElementById('nonce').value=nonce;
+ submitting=true;button.textContent='Confirming…';button.disabled=true;
+ document.getElementById('message').textContent='';
+ form.submit();
+});
+document.getElementById('copyCode').addEventListener('click',()=>{
+ const v=window.currentConfirmation||'';
+ if(navigator.clipboard)navigator.clipboard.writeText(v).then(()=>document.getElementById('copyCode').textContent='Copied').catch(()=>window.prompt('Copy confirmation:',v));
+ else window.prompt('Copy confirmation:',v);
+});
+setInterval(refresh,10000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
+setTimeout(()=>{if(document.getElementById('confirmed').textContent==='—')document.getElementById('capacityNote').textContent='Live availability could not be loaded. Please try again later.';},13000);
+</script>
+</body></html>
