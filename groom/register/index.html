@@ -150,7 +150,7 @@ const button=document.getElementById('submit');
 const type=document.getElementById('registrationType');
 const panel=document.getElementById('partnerFields');
 const dependent=['spouseRelationship','partnerFirstName','partnerLastName','partnerAge','partnerTitle'].map(x=>document.getElementById(x));
-let open=false,submitting=false,latest=null,nonce='';
+let open=true,submitting=false,latest=null,nonce='';
 document.getElementById('heading').textContent=SIDE==='Groom'?"Ackrad's invited guests":"Kaluya's invited guests";
 document.getElementById('subtitle').textContent="Private invitation RSVP";
 document.getElementById('capacity').textContent=String(CAPACITY);
@@ -217,6 +217,7 @@ form.addEventListener('submit',event=>{
  submitting=true;button.textContent='Confirming…';button.disabled=true;
  document.getElementById('message').textContent='';
  form.submit();
+ setTimeout(()=>{if(submitting){submitting=false;open=false;button.disabled=true;document.getElementById('message').textContent='Your registration could not be verified. Do not submit again yet. Contact the organizers to check whether your places were recorded.';document.getElementById('statusText').textContent='Confirmation unavailable. Please contact the organizers.';}},25000);
 });
 document.getElementById('copyCode').addEventListener('click',()=>{
  const v=window.currentConfirmation||'';
@@ -225,6 +226,6 @@ document.getElementById('copyCode').addEventListener('click',()=>{
 });
 setInterval(refresh,10000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
-setTimeout(()=>{if(document.getElementById('confirmed').textContent==='—')document.getElementById('capacityNote').textContent='Live availability could not be loaded. Please try again later.';},13000);
+setTimeout(()=>{if(document.getElementById('confirmed').textContent==='—'){document.getElementById('capacityNote').textContent='Live place counts are temporarily unavailable. We will check availability when you submit.';document.getElementById('statusText').textContent='You can submit your details without signing in. Your place is confirmed only when a confirmation number appears.';updateType();}},4000);
 </script>
 </body></html>
