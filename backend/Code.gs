@@ -178,3 +178,26 @@ function adminShowSheet() {
 }
 
 /** To release a seat, edit a guest's Status cell to "Cancelled". */
+
+/**
+ * Receives registration from the GitHub-hosted form without exposing guest details in URLs.
+ * Posts the outcome to the originating invitation page. Keep this in the EXISTING deployment.
+ */
+function doPost(e) {
+  const p = e && e.parameter ? e.parameter : {};
+  const side = p.side;
+  const nonce = String(p.nonce || '').slice(0,100);
+  let response;
+  try {
+    if (!validSide_(side) || !/^[a-zA-Z0-9_-]{12,100}$/.test(nonce))
+      throw new Error('Invalid registration request.');
+    response = registerGuest(p);
+  } catch (err) {
+    response = {ok:false,message:'The registration could not be completed. Please contact the organizers if you already submitted.'};
+  }
+  const payload = JSON.stringify({type:'ACKRAD_KALUYA_REGISTRATION_RESULT',side:side,nonce:nonce,result:response}).replace(/</g,'\\u003c');
+  const html = '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>'+
+    '<script>window.top.postMessage('+payload+',"https://ackrad-data-analyst.github.io");<\\/script>'+
+    '</body></html>';
+  return HtmlService.createHtmlOutput(html).setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
