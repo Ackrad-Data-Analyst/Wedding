@@ -61,7 +61,7 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
 </div>
 <p class="small muted" id="liveCountdown"></p>
 <div class="track" role="progressbar" aria-label="Seats reserved" aria-valuemin="0" id="progress" aria-valuenow="0"><div class="fill" id="progressFill"></div></div>
-<p class="small muted" id="capacityNote" role="status">Checking live guest availability…</p>
+<p class="small muted" id="capacityNote" role="status">Available places are verified when you submit.</p>
 
 <div class="panel" id="formPanel">
   <h2>Confirm your attendance</h2>
@@ -128,7 +128,7 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
     </div>
     <p class="error" id="message" role="alert"></p>
     <button type="submit" id="submit" class="btn" disabled>Confirm my attendance</button>
-    <p class="small muted" id="statusText">Checking registration availability…</p>
+    <p class="small muted" id="statusText">Complete your details and tap Confirm. No account is needed.</p>
   </form>
 </div>
 
@@ -151,6 +151,7 @@ const type=document.getElementById('registrationType');
 const panel=document.getElementById('partnerFields');
 const dependent=['spouseRelationship','partnerFirstName','partnerLastName','partnerAge','partnerTitle'].map(x=>document.getElementById(x));
 let open=true,submitting=false,latest=null,nonce='';
+// Google may block the optional read-only iframe on mobile; never block the form on its status display.
 document.getElementById('heading').textContent=SIDE==='Groom'?"Ackrad's invited guests":"Kaluya's invited guests";
 document.getElementById('subtitle').textContent="Private invitation RSVP";
 document.getElementById('capacity').textContent=String(CAPACITY);
@@ -233,8 +234,8 @@ document.getElementById('copyCode').addEventListener('click',()=>{
  if(navigator.clipboard)navigator.clipboard.writeText(v).then(()=>document.getElementById('copyCode').textContent='Copied').catch(()=>window.prompt('Copy confirmation:',v));
  else window.prompt('Copy confirmation:',v);
 });
-setInterval(refresh,10000);
+setInterval(refresh,60000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
-setTimeout(()=>{if(document.getElementById('confirmed').textContent==='—'){document.getElementById('capacityNote').textContent='Live place counts are temporarily unavailable. We will check availability when you submit.';document.getElementById('statusText').textContent='You can submit your details without signing in. Your place is confirmed only when a confirmation number appears.';updateType();}},4000);
+setTimeout(()=>{if(document.getElementById('confirmed').textContent==='—'){document.getElementById('capacityNote').textContent='Guest availability will be verified when you submit.';document.getElementById('statusText').textContent='No login needed. Registration is confirmed only after a confirmation number appears.';updateType();}},4000);
 </script>
 </body></html>
