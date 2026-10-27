@@ -175,10 +175,12 @@ function refresh(){
 window.addEventListener('message',event=>{
  if(!/^https:\/\/(?:script\.google\.com|(?:[a-z0-9-]+\.)*googleusercontent\.com)$/i.test(event.origin))return;
  const m=event.data;
- if(!m||m.side!==SIDE)return;
+ if(!m)return;
+ if(m.type==='ACKRAD_KALUYA_SIDE_STATUS' && m.status?.side!==SIDE)return;
+ if(m.type==='ACKRAD_KALUYA_REGISTRATION_RESULT' && m.side!==SIDE)return;
  if(m.type==='ACKRAD_KALUYA_SIDE_STATUS'){
   const st=m.status;
-  if(!st||!Number.isInteger(st.confirmed)||st.confirmed<0||st.confirmed>CAPACITY||!Number.isInteger(st.capacity)||st.confirmed+st.remaining!==st.capacity)return;
+  if(!st||!Number.isInteger(st.remaining)||!Number.isInteger(st.confirmed)||st.confirmed<0||st.confirmed>CAPACITY||!Number.isInteger(st.capacity)||st.confirmed+st.remaining!==st.capacity)return;
   latest={...st,capacity:CAPACITY,remaining:CAPACITY-st.confirmed};
   document.getElementById('confirmed').textContent=String(st.confirmed);
   document.getElementById('remaining').textContent=String(latest.remaining);
