@@ -41,9 +41,18 @@ textarea{min-height:80px}
 .success{background:#eef7ee;border:1px solid #b3d2b1;border-radius:10px;padding:23px}
 .hidden{display:none!important}
 .actions{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
+.ticket{background:#fff;border:1px solid #d9c9b8;border-radius:12px;padding:20px;margin-top:18px;text-align:center}
+.ticket .code{font:700 21px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--wine);letter-spacing:.04em;word-break:break-word}
+.ticket .guest{font-size:18px;font-weight:700;margin:8px 0 2px}
+.ticket .meta{margin:3px 0;color:#5f5652}
+#qrCode{display:flex;justify-content:center;margin:18px auto 10px;min-height:220px}
+#qrCode canvas,#qrCode img{border:10px solid #fff;max-width:240px;height:auto}
+#saveTicket{background:var(--wine);color:#fff}
+.ticket-help{font-size:13px;color:#6a625d;margin:9px auto 0;max-width:520px}
 footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
 @media(max-width:600px){main{padding:10px 11px 30px}header{padding-top:14px}.fields{grid-template-columns:1fr;gap:0}.summary{gap:5px}.metric{padding:9px 2px}.metric strong{font-size:23px}.metric span{font-size:11px}.panel{padding:17px 13px}}
 </style>
+<script src="../../assets/qrcode.min.js"></script>
 </head>
 <body data-side="Bride">
 <main><p><a href="../" style="color:#67263d;text-decoration:none;font-weight:650">← Back to invitation</a></p>
@@ -135,9 +144,20 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
 <div class="success hidden" id="success" aria-live="polite">
   <h2>Your attendance is confirmed!</h2>
   <p id="confirmationText"></p>
-  <p><strong>2 January 2027 · Andrew's Motel, Lusaka</strong></p>
-  <p>Save your confirmation number and present it with your name at the entrance. Please contact the organizers if you need to cancel.</p>
-  <div class="actions"><button type="button" class="btn secondary" id="copyCode">Copy confirmation</button></div>
+  <div class="ticket" id="ticketCard">
+    <div class="eyebrow">ACKRAD &amp; KALUYA · WEDDING ENTRY CONFIRMATION</div>
+    <div class="guest" id="ticketNames"></div>
+    <p class="meta"><span id="ticketSide"></span> · <span id="ticketSeats"></span> place(s) reserved</p>
+    <p class="code" id="ticketCode"></p>
+    <div id="qrCode" aria-label="Wedding confirmation QR code"></div>
+    <p class="meta"><strong>2 January 2027 · Andrew's Motel, Lusaka</strong></p>
+    <p class="ticket-help">Present this QR code or your confirmation number at the entrance. Keep this confirmation with you until you have entered the venue.</p>
+  </div>
+  <div class="actions">
+    <button type="button" class="btn" id="saveTicket">Save confirmation</button>
+    <button type="button" class="btn secondary" id="copyCode">Copy confirmation code</button>
+  </div>
+  <p class="small muted">If your plans change, please contact the organizers so your reserved place can be released.</p>
 </div>
 <footer>Ackrad &amp; Kaluya · Wedding guest registration<br>Only invited adults may register.</footer>
 <iframe name="submitBridge" id="submitBridge" title="Registration response" style="position:absolute;left:-9999px;width:1px;height:1px;border:0"></iframe><iframe id="statusBridge" title="Seat availability" src="https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXqjpi4LDQfH66CkRGUGogAI_guJBrE4Z1PO1y4vH8Jg/exec?side=Bride&amp;view=status" style="position:absolute;left:-9999px;width:1px;height:1px;border:0"></iframe></main>
@@ -224,8 +244,9 @@ window.addEventListener('message',event=>{
    const p=new FormData(form),n=p.get('firstName')+' '+p.get('lastName'),full=p.get('registrationType')==='couple'?n+' and '+p.get('partnerFirstName')+' '+p.get('partnerLastName'):n;
    document.getElementById('formPanel').classList.add('hidden');
    document.getElementById('success').classList.remove('hidden');
-   document.getElementById('confirmationText').textContent=full+', your '+(r.seats===2?'two guest places are':'guest place is')+' confirmed. Reference: '+r.code+'.';
-   window.currentConfirmation=r.code+' — '+full+' — 2 January 2027';
+   document.getElementById('confirmationText').textContent=full+', your '+(r.seats===2?'two invited adult places are':'invited adult place is')+' confirmed.';
+   createConfirmationTicket(r.code,full,r.seats);
+   window.currentConfirmation=r.code;
    window.scrollTo(0,0);refresh();
   }else{
    document.getElementById('message').textContent=r.message||'Unable to register. Please contact the organizers.';
@@ -235,6 +256,67 @@ window.addEventListener('message',event=>{
   updateType();
  }
 });
+let currentTicket=null;
+function createConfirmationTicket(code,guests,seats){
+ currentTicket={code,guests,seats,side:SIDE};
+ document.getElementById('ticketCode').textContent=code;
+ document.getElementById('ticketNames').textContent=guests;
+ document.getElementById('ticketSeats').textContent=String(seats);
+ document.getElementById('ticketSide').textContent=SIDE==='Groom'?"Ackrad's invited guests":"Kaluya's invited guests";
+ const qr=document.getElementById('qrCode');
+ qr.innerHTML='';
+ const qrPayload='AKW2027|CODE='+code+'|SIDE='+SIDE.toUpperCase()+'|SEATS='+seats;
+ new QRCode(qr,{text:qrPayload,width:220,height:220,correctLevel:QRCode.CorrectLevel.H});
+}
+function wrapTicketText(ctx,text,x,y,maxWidth,lineHeight){
+ const words=String(text).split(/\s+/); let line='',lines=[];
+ for(const word of words){
+   const test=line?line+' '+word:word;
+   if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;
+ }
+ if(line)lines.push(line);
+ lines.forEach((v,i)=>ctx.fillText(v,x,y+i*lineHeight));
+ return y+lines.length*lineHeight;
+}
+function buildTicketCanvas(ticket){
+ const c=document.createElement('canvas'); c.width=1080;c.height=1350;
+ const ctx=c.getContext('2d');
+ ctx.fillStyle='#fbf7ef';ctx.fillRect(0,0,c.width,c.height);
+ ctx.fillStyle='#67263d';ctx.textAlign='center';
+ ctx.font='700 38px Arial';ctx.fillText('ACKRAD & KALUYA',540,95);
+ ctx.fillStyle='#a77b48';ctx.font='700 24px Arial';ctx.fillText('WEDDING ENTRY CONFIRMATION',540,145);
+ ctx.fillStyle='#2e2629';ctx.font='700 42px Arial';
+ let y=235; y=wrapTicketText(ctx,ticket.guests,540,y,880,52)+18;
+ ctx.font='28px Arial';ctx.fillStyle='#5f5652';
+ ctx.fillText((ticket.side==='Groom'?"Ackrad's invited guests":"Kaluya's invited guests")+' · '+ticket.seats+' place'+(ticket.seats===1?'':'s')+' reserved',540,y); y+=68;
+ ctx.font='700 34px monospace';ctx.fillStyle='#67263d';ctx.fillText(ticket.code,540,y); y+=48;
+ const qrCanvas=document.querySelector('#qrCode canvas');
+ if(qrCanvas){ctx.fillStyle='#fff';ctx.fillRect(360,y,360,360);ctx.drawImage(qrCanvas,390,y+30,300,300);}
+ y+=420;ctx.fillStyle='#2e2629';ctx.font='700 30px Arial';ctx.fillText("2 January 2027 · Andrew's Motel, Lusaka",540,y);y+=58;
+ ctx.font='25px Arial';ctx.fillStyle='#5f5652';
+ wrapTicketText(ctx,'Present this QR code or confirmation number at the entrance. Keep this confirmation with you until you have entered the venue.',540,y,850,36);
+ ctx.strokeStyle='#d9c9b8';ctx.lineWidth=4;ctx.strokeRect(34,34,c.width-68,c.height-68);
+ return c;
+}
+async function saveConfirmationTicket(){
+ if(!currentTicket)return;
+ const canvas=buildTicketCanvas(currentTicket);
+ const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png',1));
+ if(!blob)return;
+ const filename='Ackrad-Kaluya-Wedding-'+currentTicket.code+'.png';
+ const file=new File([blob],filename,{type:'image/png'});
+ try{
+   if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+     await navigator.share({files:[file],title:'Wedding confirmation '+currentTicket.code});
+     return;
+   }
+ }catch(err){if(err&&err.name==='AbortError')return;}
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+document.getElementById('saveTicket').addEventListener('click',saveConfirmationTicket);
+
 form.addEventListener('submit',event=>{
  event.preventDefault();
  if(submitting||!open||!form.reportValidity()||(type.value==='couple'&&latest?.remaining<2))return;
