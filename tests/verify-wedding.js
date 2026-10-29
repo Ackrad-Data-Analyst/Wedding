@@ -53,9 +53,15 @@ const CASES=[
        }
        return {lib,generated,ticketCanvas,saveFunction,saveButton:!!document.getElementById('saveTicket'),codeField:!!document.getElementById('ticketCode')};
      });
-     const result={http:r&&r.status(),url:form.url(),showsSide:txt.includes(t.side==='Groom'?"Ackrad's invited guests":"Kaluya's invited guests"),hasForm:txt.includes('Confirm your attendance'),hasCurrentQuota:txt.includes(String(t.limit)),hasGuestFields:txt.includes('WhatsApp number'),hasDeadline:txt.includes('2 JANUARY 2027'),qrTicket:qrTest};
+     const fieldCheck=await form.evaluate(()=>({
+       visibleAge:!!document.querySelector('input[name="age"]:not([type="hidden"]), #age, #partnerAge'),
+       visibleAssistance:!!document.querySelector('#accessibility:not([type="hidden"]), #assistanceDetails'),
+       legacyAge:document.querySelector('input[type="hidden"][name="age"]')?.value==='18',
+       legacyPartnerAge:document.querySelector('input[type="hidden"][name="partnerAge"]')?.value==='18'
+     }));
+     const result={http:r&&r.status(),url:form.url(),showsSide:txt.includes(t.side==='Groom'?"Ackrad's invited guests":"Kaluya's invited guests"),hasForm:txt.includes('Confirm your attendance'),hasCurrentQuota:txt.includes(String(t.limit)),hasGuestFields:txt.includes('WhatsApp number'),hasDeadline:txt.includes('2 JANUARY 2027'),qrTicket:qrTest,fields:fieldCheck};
      console.log('REGISTRATION FORM '+t.side+': '+JSON.stringify({...result,visibleTextPreview:txt.slice(0,650),frames:frameTexts.map(z=>z.url)}));
-     if(!result.showsSide||!result.hasForm||!result.hasCurrentQuota||!result.hasGuestFields||Object.values(qrTest).some(x=>!x)){failed=true;console.log('FAIL REGISTRATION FORM '+t.side);}
+     if(!result.showsSide||!result.hasForm||!result.hasCurrentQuota||!result.hasGuestFields||Object.values(qrTest).some(x=>!x)||fieldCheck.visibleAge||fieldCheck.visibleAssistance||!fieldCheck.legacyAge||!fieldCheck.legacyPartnerAge){failed=true;console.log('FAIL REGISTRATION FORM '+t.side);}
     }catch(e){failed=true;console.log('FAIL REGISTRATION FORM '+t.side+' '+String(e));}
     await form.close();
    }
