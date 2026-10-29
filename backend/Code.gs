@@ -8,8 +8,7 @@ const CONFIG = {
   EVENT: '2027-01-02T10:00:00+02:00',
   TZ: 'Africa/Lusaka',
   SHEET: 'RSVP',
-  FIELDS: ['Timestamp','Confirmation','Title','First name','Surname','Side',
-    'Age','WhatsApp','City','Country','Accessibility','Assistance details','Status']
+  WIDTH: 13
 };
 
 function validSide_(side) {
@@ -77,7 +76,7 @@ function sheet_() {
   let sheet = ss.getSheetByName(CONFIG.SHEET);
   if (!sheet) {
     sheet = ss.insertSheet(CONFIG.SHEET);
-    sheet.appendRow(CONFIG.FIELDS);
+    sheet.appendRow(['Timestamp','Confirmation','Title','First name','Surname','Side','Reserved','WhatsApp','City','Country','Reserved 2','Reserved 3','Status']);
     sheet.setFrozenRows(1);
   }
   return sheet;
@@ -85,7 +84,7 @@ function sheet_() {
 
 function rows_(sheet) {
   const last = sheet.getLastRow();
-  return last < 2 ? [] : sheet.getRange(2,1,last-1,CONFIG.FIELDS.length).getValues();
+  return last < 2 ? [] : sheet.getRange(2,1,last-1,CONFIG.WIDTH).getValues();
 }
 
 function status_(rows, side) {
@@ -140,11 +139,9 @@ function registerGuest(g) {
     const titles = ['Mr','Mrs','Miss','Ms','Dr','Prof','Rev','Other'];
     const first = scrub_(g.firstName,70);
     const last = scrub_(g.lastName,70);
-    const age = '';
     const phone = String(g.whatsapp == null ? '' : g.whatsapp).trim().slice(0,32); // Keep a leading + for international dialling; the saved Sheet value is quoted separately.
     const otherFirst = scrub_(g.partnerFirstName,70);
     const otherLast = scrub_(g.partnerLastName,70);
-    const otherAge = '';
     const city = scrub_(g.city,90);
     const country = scrub_(g.country,90);
     if (!titles.includes(g.title) || !first || !last || !city || !country ||
@@ -166,20 +163,15 @@ function registerGuest(g) {
       Utilities.getUuid().slice(0,8).toUpperCase();
 
     const primary = [
-      new Date(),code,g.title,first,last,g.side,age,"'"+phone,city,country,
-      g.accessibility === 'Yes' ? 'Yes' : 'No',
-      scrub_(g.assistanceDetails,350),'Confirmed'
+      new Date(),code,g.title,first,last,g.side,'',"'"+phone,city,country,'','','Confirmed'
     ];
     const entries = [primary];
     if (isCouple) entries.push([
-      new Date(),code,g.partnerTitle,otherFirst,otherLast,g.side,otherAge,
-      "'"+phone,city,country,
-      g.accessibility === 'Yes' ? 'Yes' : 'No',
-      'Registered together with '+first+' '+last+'. '+scrub_(g.assistanceDetails,240),
-      'Confirmed'
+      new Date(),code,g.partnerTitle,otherFirst,otherLast,g.side,'',
+      "'"+phone,city,country,'','','Confirmed'
     ]);
     const startingRow = sheet.getLastRow()+1;
-    sheet.getRange(startingRow,1,entries.length,CONFIG.FIELDS.length).setValues(entries);
+    sheet.getRange(startingRow,1,entries.length,CONFIG.WIDTH).setValues(entries);
     SpreadsheetApp.flush();
     return {ok:true,code,seats,status:status_(rows_(sheet),g.side)};
   } finally {
