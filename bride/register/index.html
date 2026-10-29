@@ -76,7 +76,7 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
   <h2>Confirm your attendance</h2>
   <p class="muted small">STRICTLY BY INVITATION ONLY. Register yourself or yourself and your invited spouse. A spouse is not an additional guest or friend. Each adult takes one place.</p>
   <div id="closed" class="notice hidden"></div>
-  <form id="rsvpForm" method="POST" action="https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXqjpi4LDQfH66CkRGUGogAI_guJBrE4Z1PO1y4vH8Jg/exec" target="submitBridge"><input type="hidden" name="age" value="18"><input type="hidden" name="partnerAge" value="18"><input type="hidden" name="accessibility" value="No"><input type="hidden" name="side" value="Bride"><input type="hidden" id="nonce" name="nonce"><div class="field"><label for="registrationType">Registration type *</label><select id="registrationType" name="registrationType" required><option value="individual">One invited adult (1 place)</option><option value="couple">My spouse and me — husband or wife (2 places)</option></select></div>
+  <form id="rsvpForm" method="POST" action="https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXqjpi4LDQfH66CkRGUGogAI_guJBrE4Z1PO1y4vH8Jg/exec" target="submitBridge"><input type="hidden" name="side" value="Bride"><input type="hidden" id="nonce" name="nonce"><div class="field"><label for="registrationType">Registration type *</label><select id="registrationType" name="registrationType" required><option value="individual">One invited adult (1 place)</option><option value="couple">My spouse and me — husband or wife (2 places)</option></select></div>
     <div class="fields">
       <div class="field">
         <label for="title">Title *</label>
@@ -109,7 +109,7 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
     </div>
 <div id="partnerFields" class="field hidden"><label for="spouseRelationship">Who are you registering with? *</label><select id="spouseRelationship" name="spouseRelationship"><option value="">Select relationship</option><option value="husband">My husband</option><option value="wife">My wife</option></select><label>Full name of your invited husband or wife *</label><input id="partnerFirstName" name="partnerFirstName" placeholder="Spouse’s first name"><input id="partnerLastName" name="partnerLastName" placeholder="Spouse’s surname"><select id="partnerTitle" name="partnerTitle"><option value="">Select title</option><option>Mr</option><option>Mrs</option><option>Miss</option><option>Ms</option><option>Dr</option><option>Prof</option><option>Rev</option><option>Other</option></select></div>
     <div class="check"><input type="checkbox" id="adultOnly" required>
-      <label for="adultOnly">All people I am registering are invited adults aged 18 or older. No children or uninvited guests. *</label>
+      <label for="adultOnly">All people I am registering are invited adults. No children or uninvited guests. *</label>
     </div>
     <div class="check"><input type="checkbox" id="attend" required>
       <label for="attend">I confirm that each adult named in this registration has received an invitation to attend on 2 January 2027. *</label>
