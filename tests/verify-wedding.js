@@ -7,6 +7,7 @@ const CASES=[
 (async()=>{
  const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
  const context=await browser.newContext({viewport:{width:1200,height:850}});
+ let failed=false;
  const APPS='https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXqjpi4LDQfH66CkRGUGogAI_guJBrE4Z1PO1y4vH8Jg/exec';
  // Non-saving backend probe: city intentionally omitted so registerGuest returns validation
  // before any Sheet write. This verifies the LIVE deployment no longer requires age/assistance.
@@ -21,14 +22,13 @@ const CASES=[
      probePage.waitForNavigation({waitUntil:'domcontentloaded',timeout:40000}).catch(()=>null),
      probePage.locator('#p').evaluate(f=>HTMLFormElement.prototype.submit.call(f))
    ]);
-   const probeText=await probePage.locator('body').innerText().catch(()=> '');
+   const probeText=await probePage.content().catch(()=> '');
    console.log('LIVE BACKEND VALIDATION PROBE: '+probeText.slice(0,1200));
    const obsolete=/valid name, title, age|assistance|accessibility/i.test(probeText);
    const current=/valid name, title, WhatsApp number, city and country/i.test(probeText);
    if(obsolete||!current){failed=true;console.log('FAIL LIVE BACKEND - deployed Apps Script is not the current age/assistance-free Code.gs');}
    await probePage.close();
  }catch(e){failed=true;console.log('FAIL LIVE BACKEND PROBE '+String(e));}
- let failed=false;
  for(const t of CASES){
   const page=await context.newPage();
   try{
