@@ -169,7 +169,23 @@ function tick(){
  document.getElementById('liveCountdown').textContent='Countdown: '+d+' days · '+String(h).padStart(2,'0')+' hours · '+String(m).padStart(2,'0')+' minutes · '+String(s).padStart(2,'0')+' seconds';
 }
 tick();setInterval(tick,1000);
+function loadJsonp(view,token){
+ const script=document.createElement('script');
+ script.src="https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXqjpi4LDQfH66CkRGUGogAI_guJBrE4Z1PO1y4vH8Jg/exec"+'?side='+encodeURIComponent(SIDE)+'&view='+view+(token?'&nonce='+encodeURIComponent(token):'')+'&t='+Date.now();
+ script.async=true;
+ script.onerror=()=>script.remove();
+ script.onload=()=>script.remove();
+ document.head.appendChild(script);
+}
+window.AKReceiveStatus=function(status){
+ window.dispatchEvent(new MessageEvent('message',{origin:'https://script.google.com',data:{type:'ACKRAD_KALUYA_SIDE_STATUS',status}}));
+};
+window.AKReceiveReceipt=function(receipt){
+ if(!receipt||receipt.side!==SIDE||receipt.nonce!==nonce||!receipt.ready)return;
+ window.dispatchEvent(new MessageEvent('message',{origin:'https://script.google.com',data:{type:'ACKRAD_KALUYA_REGISTRATION_RESULT',side:SIDE,nonce,result:receipt.result}}));
+};
 function refresh(){
+ loadJsonp('public-count');
  const f=document.getElementById('statusBridge');
  f.src="https://script.google.com/macros/s/AKfycbyVkW0_32J0gIyR6gUHUelbAWiXqjpi4LDQfH66CkRGUGogAI_guJBrE4Z1PO1y4vH8Jg/exec"+'?side='+SIDE+'&view=status&reload='+Date.now();
 }
@@ -227,7 +243,12 @@ form.addEventListener('submit',event=>{
  submitting=true;button.textContent='Confirming…';button.disabled=true;
  document.getElementById('message').textContent='';
  form.submit();
- setTimeout(()=>{if(submitting){submitting=false;open=false;button.textContent='Confirmation unavailable';button.disabled=true;document.getElementById('message').textContent='⚠️ We could not verify whether your registration was saved. Please do not submit again. Contact the organizers to check your names.';document.getElementById('statusText').textContent='No confirmation number was received. Your reservation is not yet confirmed.';}},7000);
+ let receiptTries=0;
+ const receiptPoll=setInterval(()=>{
+   if(!submitting||++receiptTries>12){clearInterval(receiptPoll);return;}
+   loadJsonp('receipt',nonce);
+ },1200);
+ setTimeout(()=>{if(submitting){submitting=false;open=false;button.textContent='Confirmation unavailable';button.disabled=true;document.getElementById('message').textContent='⚠️ We could not verify whether your registration was saved. Please do not submit again. Contact the organizers to check your names.';document.getElementById('statusText').textContent='No confirmation number was received. Your reservation is not yet confirmed.';}},18000);
 });
 document.getElementById('copyCode').addEventListener('click',()=>{
  const v=window.currentConfirmation||'';
