@@ -139,7 +139,7 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
     <p class="ticket-help">Present this QR code or your confirmation number at the entrance. Keep this confirmation with you until you have entered the venue.</p>
   </div>
   <div class="actions">
-    <button type="button" class="btn" id="saveTicket">Download confirmation</button>
+    <button type="button" class="btn" id="saveTicket">Download QR code</button>
     <button type="button" class="btn secondary" id="copyCode">Copy confirmation code</button>
   </div>
   <div class="notice" style="margin-top:18px">
@@ -294,7 +294,7 @@ async function downloadConfirmationTicket(){
  const canvas=buildTicketCanvas(currentTicket);
  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png',1));
  if(!blob)return;
- const filename='Ackrad-Kaluya-Wedding-'+currentTicket.code+'.png';
+ const filename='Ackrad-Kaluya-Wedding-QR-'+currentTicket.code+'.png';
  const url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;
  a.download=filename;
