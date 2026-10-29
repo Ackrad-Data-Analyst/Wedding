@@ -17,7 +17,25 @@ function validSide_(side) {
 }
 
 function doGet(e) {
-  const side = e && e.parameter ? e.parameter.side : '';
+  const p = (e && e.parameter) || {};
+  const side = p.side || '';
+  // Cross-site JSONP: public aggregate status or a one-time receipt token only.
+  // No guest names, phone numbers or other personal details enter the URL.
+  if (p.view === 'receipt' && validSide_(side)) {
+    const nonce = String(p.nonce || '');
+    const key = side + '_' + nonce;
+    const allowed = /^[a-zA-Z0-9_-]{12,100}$/.test(nonce);
+    const stored = allowed ? CacheService.getScriptCache().get(key) : null;
+    const receipt = stored ? JSON.parse(stored) : null;
+    const result = JSON.stringify({side:side,nonce:nonce,ready:!!receipt,result:receipt});
+    return ContentService.createTextOutput('window.AKReceiveReceipt('+result+');')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  if (p.view === 'public-count' && validSide_(side)) {
+    const status = JSON.stringify(getPublicStatus(side));
+    return ContentService.createTextOutput('window.AKReceiveStatus('+status+');')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
   if (validSide_(side) && e && e.parameter && e.parameter.view === 'status') {
     // A minimal, read-only status bridge for each public family invitation.
     // Sends aggregate counts only; guest names, phone numbers and sheet data stay private.
@@ -194,6 +212,10 @@ function doPost(e) {
     response = registerGuest(p);
   } catch (err) {
     response = {ok:false,message:'The registration could not be completed. Please contact the organizers if you already submitted.'};
+  }
+  // Save receipt so the GitHub page can retrieve it without iframe postMessage.
+  if (validSide_(side) && /^[a-zA-Z0-9_-]{12,100}$/.test(nonce)) {
+    CacheService.getScriptCache().put(side+'_'+nonce,JSON.stringify(response),21600);
   }
   const payload = JSON.stringify({type:'ACKRAD_KALUYA_REGISTRATION_RESULT',side:side,nonce:nonce,result:response}).replace(/</g,'\\u003c');
   const html = '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>'+
