@@ -140,21 +140,19 @@ function registerGuest(g) {
     const titles = ['Mr','Mrs','Miss','Ms','Dr','Prof','Rev','Other'];
     const first = scrub_(g.firstName,70);
     const last = scrub_(g.lastName,70);
-    const age = Number(g.age);
+    const age = '';
     const phone = String(g.whatsapp == null ? '' : g.whatsapp).trim().slice(0,32); // Keep a leading + for international dialling; the saved Sheet value is quoted separately.
     const otherFirst = scrub_(g.partnerFirstName,70);
     const otherLast = scrub_(g.partnerLastName,70);
-    const otherAge = Number(g.partnerAge);
+    const otherAge = '';
     const city = scrub_(g.city,90);
     const country = scrub_(g.country,90);
     if (!titles.includes(g.title) || !first || !last || !city || !country ||
-        !Number.isInteger(age) || age < 18 || age > 120 ||
         !/^\+?[0-9\s()-]{8,22}$/.test(phone)) {
-      return {ok:false,message:'Please enter a valid name, title, age, WhatsApp number, city and country.'};
+      return {ok:false,message:'Please enter a valid name, title, WhatsApp number, city and country.'};
     }
-    if (isCouple && (!['husband','wife'].includes(g.spouseRelationship) || !titles.includes(g.partnerTitle) || !otherFirst || !otherLast ||
-      !Number.isInteger(otherAge) || otherAge < 18 || otherAge > 120)) {
-      return {ok:false,message:'Please confirm whether the second guest is your husband or wife, and provide their name, title and age.'};
+    if (isCouple && (!['husband','wife'].includes(g.spouseRelationship) || !titles.includes(g.partnerTitle) || !otherFirst || !otherLast)) {
+      return {ok:false,message:'Please confirm whether the second guest is your husband or wife, and provide their name and title.'};
     }
     const digits = phone.replace(/\D/g,'');
     if (rows.some(r =>
