@@ -242,7 +242,7 @@ form.addEventListener('submit',event=>{
  document.getElementById('nonce').value=nonce;
  submitting=true;button.textContent='Confirming…';button.disabled=true;
  document.getElementById('message').textContent='';
- form.submit();
+ HTMLFormElement.prototype.submit.call(form);
  let receiptTries=0;
  const receiptPoll=setInterval(()=>{
    if(!submitting||++receiptTries>12){clearInterval(receiptPoll);return;}
