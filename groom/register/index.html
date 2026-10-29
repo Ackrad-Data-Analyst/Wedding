@@ -95,10 +95,6 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
         <input id="lastName" name="lastName" maxlength="70" autocomplete="family-name" required>
       </div>
       <div class="field">
-        <label for="age">Age on wedding day *</label>
-        <input type="number" id="age" name="age" min="18" max="120" required placeholder="18 or older">
-      </div>
-      <div class="field">
         <label for="whatsapp">WhatsApp number, including country code *</label>
         <input type="tel" id="whatsapp" name="whatsapp" required placeholder="+260 97 123 4567">
       </div>
@@ -118,7 +114,7 @@ footer{text-align:center;font-size:12px;color:#73665d;margin:27px auto}
         </select>
       </div>
     </div>
-<div id="partnerFields" class="field hidden"><label for="spouseRelationship">Who are you registering with? *</label><select id="spouseRelationship" name="spouseRelationship"><option value="">Select relationship</option><option value="husband">My husband</option><option value="wife">My wife</option></select><label>Full name of your invited husband or wife *</label><input id="partnerFirstName" name="partnerFirstName" placeholder="Spouse’s first name"><input id="partnerLastName" name="partnerLastName" placeholder="Spouse’s surname"><input id="partnerAge" name="partnerAge" type="number" min="18" max="120" placeholder="Age"><select id="partnerTitle" name="partnerTitle"><option value="">Select title</option><option>Mr</option><option>Mrs</option><option>Miss</option><option>Ms</option><option>Dr</option><option>Prof</option><option>Rev</option><option>Other</option></select></div>
+<div id="partnerFields" class="field hidden"><label for="spouseRelationship">Who are you registering with? *</label><select id="spouseRelationship" name="spouseRelationship"><option value="">Select relationship</option><option value="husband">My husband</option><option value="wife">My wife</option></select><label>Full name of your invited husband or wife *</label><input id="partnerFirstName" name="partnerFirstName" placeholder="Spouse’s first name"><input id="partnerLastName" name="partnerLastName" placeholder="Spouse’s surname"><select id="partnerTitle" name="partnerTitle"><option value="">Select title</option><option>Mr</option><option>Mrs</option><option>Miss</option><option>Ms</option><option>Dr</option><option>Prof</option><option>Rev</option><option>Other</option></select></div>
     <div class="field">
       <label for="assistanceDetails">Assistance details (optional)</label>
       <textarea name="assistanceDetails" id="assistanceDetails" placeholder="For example: I use a wheelchair and may need help getting to my seat."></textarea>
@@ -169,7 +165,7 @@ const form=document.getElementById('rsvpForm');
 const button=document.getElementById('submit');
 const type=document.getElementById('registrationType');
 const panel=document.getElementById('partnerFields');
-const dependent=['spouseRelationship','partnerFirstName','partnerLastName','partnerAge','partnerTitle'].map(x=>document.getElementById(x));
+const dependent=['spouseRelationship','partnerFirstName','partnerLastName','partnerTitle'].map(x=>document.getElementById(x));
 let open=true,submitting=false,latest=null,nonce='';
 // Google may block the optional read-only iframe on mobile; never block the form on its status display.
 document.getElementById('heading').textContent=SIDE==='Groom'?"Ackrad's invited guests":"Kaluya's invited guests";
