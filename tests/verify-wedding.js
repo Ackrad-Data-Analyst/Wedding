@@ -70,7 +70,7 @@ const CASES=[
            const c=buildTicketCanvas(currentTicket);
            ticketCanvas=!!c&&c.width===1080&&c.height===1350;
          }
-         saveFunction=typeof saveConfirmationTicket==='function';
+         saveFunction=typeof downloadConfirmationTicket==='function';
        }
        return {lib,generated,ticketCanvas,saveFunction,saveButton:!!document.getElementById('saveTicket'),codeField:!!document.getElementById('ticketCode')};
      });
