@@ -39,9 +39,23 @@ const CASES=[
      await form.waitForTimeout(5500);
      const frameTexts=await Promise.all(form.frames().map(async frame=>{try{return {url:frame.url().slice(0,125),text:(await frame.locator('body').innerText({timeout:4000})).slice(0,3000)}}catch(e){return {url:frame.url().slice(0,125),text:'[unavailable]'}}}));
      const txt=frameTexts.map(x=>x.text).join('\n');
-     const result={http:r&&r.status(),url:form.url(),showsSide:txt.includes(t.side==='Groom'?"Ackrad's invited guests":"Kaluya's invited guests"),hasForm:txt.includes('Confirm your attendance'),hasCurrentQuota:txt.includes(String(t.limit)),hasGuestFields:txt.includes('WhatsApp number'),hasDeadline:txt.includes('2 JANUARY 2027')};
+     const qrTest=await form.evaluate(()=>{
+       const lib=typeof QRCode==='function';
+       let generated=false,ticketCanvas=false,saveFunction=false;
+       if(lib&&typeof createConfirmationTicket==='function'){
+         createConfirmationTicket('TEST-QR-123','Test Guest',2);
+         generated=!!document.querySelector('#qrCode canvas, #qrCode img');
+         if(typeof buildTicketCanvas==='function'){
+           const c=buildTicketCanvas(currentTicket);
+           ticketCanvas=!!c&&c.width===1080&&c.height===1350;
+         }
+         saveFunction=typeof saveConfirmationTicket==='function';
+       }
+       return {lib,generated,ticketCanvas,saveFunction,saveButton:!!document.getElementById('saveTicket'),codeField:!!document.getElementById('ticketCode')};
+     });
+     const result={http:r&&r.status(),url:form.url(),showsSide:txt.includes(t.side==='Groom'?"Ackrad's invited guests":"Kaluya's invited guests"),hasForm:txt.includes('Confirm your attendance'),hasCurrentQuota:txt.includes(String(t.limit)),hasGuestFields:txt.includes('WhatsApp number'),hasDeadline:txt.includes('2 JANUARY 2027'),qrTicket:qrTest};
      console.log('REGISTRATION FORM '+t.side+': '+JSON.stringify({...result,visibleTextPreview:txt.slice(0,650),frames:frameTexts.map(z=>z.url)}));
-     if(!result.showsSide||!result.hasForm||!result.hasCurrentQuota||!result.hasGuestFields){failed=true;console.log('FAIL REGISTRATION FORM '+t.side);}
+     if(!result.showsSide||!result.hasForm||!result.hasCurrentQuota||!result.hasGuestFields||Object.values(qrTest).some(x=>!x)){failed=true;console.log('FAIL REGISTRATION FORM '+t.side);}
     }catch(e){failed=true;console.log('FAIL REGISTRATION FORM '+t.side+' '+String(e));}
     await form.close();
    }
