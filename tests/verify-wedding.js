@@ -40,7 +40,7 @@ const CASES=[
      const frameTexts=await Promise.all(form.frames().map(async frame=>{try{return {url:frame.url().slice(0,125),text:(await frame.locator('body').innerText({timeout:4000})).slice(0,3000)}}catch(e){return {url:frame.url().slice(0,125),text:'[unavailable]'}}}));
      const txt=frameTexts.map(x=>x.text).join('\n');
      const result={http:r&&r.status(),url:form.url(),showsSide:txt.includes(t.side==='Groom'?"Groom's":"Bride's"),hasForm:txt.includes('Confirm your attendance'),hasCurrentQuota:txt.includes(String(t.limit)),hasGuestFields:txt.includes('WhatsApp number'),hasDeadline:txt.includes('2 JANUARY 2027')};
-     console.log('REGISTRATION FORM '+t.side+': +JSON.stringify({...result,visibleTextPreview:txt.slice(0,650),frames:frameTexts.map(z=>z.url)}));
+     console.log('REGISTRATION FORM '+t.side+': '+JSON.stringify({...result,visibleTextPreview:txt.slice(0,650),frames:frameTexts.map(z=>z.url)}));
      if(!result.showsSide||!result.hasForm||!result.hasCurrentQuota||!result.hasGuestFields){failed=true;console.log('FAIL REGISTRATION FORM '+t.side);}
     }catch(e){failed=true;console.log('FAIL REGISTRATION FORM '+t.side+' '+String(e));}
     await form.close();
