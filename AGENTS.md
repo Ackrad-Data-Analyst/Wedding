@@ -99,7 +99,7 @@ After a SUCCESSFUL backend save only, show:
 - WhatsApp group join button
 
 Current WhatsApp group invite:
-https://chat.whatsapp.com/CgcQJLu21oJ2vK3ci808sy?s=cl&p=i&mlu=4&ilr=4&iam=2
+https://chat.whatsapp.com/FQV5dUvN7k1F5DvZfLT2o5?s=sh&p=a&mlu=4&ilr=4&iam=2
 
 The QR generator is bundled locally in:
 assets/qrcode.min.js
