@@ -8,7 +8,7 @@ const CONFIG = {
   EVENT: '2027-01-02T10:00:00+02:00',
   TZ: 'Africa/Lusaka',
   SHEET: 'RSVP',
-  WIDTH: 13
+  WIDTH: 13 // Read legacy 13-column rows as well as current 10-column rows
 };
 
 function validSide_(side) {
@@ -76,7 +76,7 @@ function sheet_() {
   let sheet = ss.getSheetByName(CONFIG.SHEET);
   if (!sheet) {
     sheet = ss.insertSheet(CONFIG.SHEET);
-    sheet.appendRow(['Timestamp','Confirmation','Title','First name','Surname','Side','Reserved','WhatsApp','City','Country','Reserved 2','Reserved 3','Status']);
+    sheet.appendRow(['Timestamp','Confirmation','Title','First name','Surname','Side','WhatsApp','City','Country','Status']);
     sheet.setFrozenRows(1);
   }
   return sheet;
@@ -87,12 +87,27 @@ function rows_(sheet) {
   return last < 2 ? [] : sheet.getRange(2,1,last-1,CONFIG.WIDTH).getValues();
 }
 
+
+// The live Sheet contains older 10-column records and some newer 13-column
+// records. Identify each row's layout by its actual status field. No migration
+// or destructive edit of existing guest records is required.
+function guestStatus_(r) {
+  const modern = String(r[9] == null ? '' : r[9]).trim().toLowerCase();
+  const legacy = String(r[12] == null ? '' : r[12]).trim().toLowerCase();
+  return ['confirmed','cancelled','canceled'].includes(modern) ? modern : legacy;
+}
+function guestPhone_(r) {
+  // 10-column layout: WhatsApp is G (index 6).
+  // 13-column layout: WhatsApp is H (index 7).
+  return String(guestStatus_(r) === String(r[9] == null ? '' : r[9]).trim().toLowerCase() ? r[6] : r[7] || '').replace(/\D/g,'');
+}
+
 function status_(rows, side) {
   if (!validSide_(side)) throw new Error('Invalid family-side registration link.');
   const capacity = CONFIG.LIMITS[side];
   const confirmed = rows.filter(r =>
     String(r[5]).trim() === side &&
-    String(r[12]).trim().toLowerCase() === 'confirmed'
+    guestStatus_(r) === 'confirmed'
   ).length;
   const remaining = Math.max(0, capacity-confirmed);
   const deadlineString = '2026-11-15T23:59:00+02:00'; // Fixed RSVP deadline chosen by the organizers.
@@ -153,8 +168,8 @@ function registerGuest(g) {
     }
     const digits = phone.replace(/\D/g,'');
     if (rows.some(r =>
-      String(r[7]).replace(/\D/g,'')===digits &&
-      String(r[12]).trim().toLowerCase()==='confirmed'
+      guestPhone_(r)===digits &&
+      guestStatus_(r)==='confirmed'
     )) {
       return {ok:false,message:'This WhatsApp number already has a confirmed registration. Contact the organizers for help.'};
     }
@@ -162,16 +177,15 @@ function registerGuest(g) {
       Utilities.formatDate(new Date(),CONFIG.TZ,'yyMMdd') + '-' +
       Utilities.getUuid().slice(0,8).toUpperCase();
 
-    const primary = [
-      new Date(),code,g.title,first,last,g.side,'',"'"+phone,city,country,'','','Confirmed'
-    ];
+    // Write to the actual 10-column schema: Status in J, WhatsApp in G.
+    const primary = [new Date(),code,g.title,first,last,g.side,"'"+phone,city,country,'Confirmed'];
     const entries = [primary];
     if (isCouple) entries.push([
-      new Date(),code,g.partnerTitle,otherFirst,otherLast,g.side,'',
-      "'"+phone,city,country,'','','Confirmed'
+      new Date(),code,g.partnerTitle,otherFirst,otherLast,g.side,
+      "'"+phone,city,country,'Confirmed'
     ]);
     const startingRow = sheet.getLastRow()+1;
-    sheet.getRange(startingRow,1,entries.length,CONFIG.WIDTH).setValues(entries);
+    sheet.getRange(startingRow,1,entries.length,10).setValues(entries);
     SpreadsheetApp.flush();
     return {ok:true,code,seats,status:status_(rows_(sheet),g.side)};
   } finally {
